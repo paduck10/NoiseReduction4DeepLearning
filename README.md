@@ -3,28 +3,45 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 
 ## WorkFlow 정리 :
 
-# 0. 크롤링 작업 :
+### 0. 크롤링 작업 :
 
-펭수 영상(90개), 양희은 라디오 음성(1000)개 크롤링. 파이썬 셀레니엄, 웹브라우저 모듈이용.
+펭수 영상(90개), 양희은 라디오 음성(1000)개 크롤링. 파이썬 셀레니엄, 웹브라우저 모듈을 이용했습니다.
 
----
-
-# 1. 음악 소리, 배경음악 제거 작업(Spleeter) : 
-
-(이걸 어떻게 해야할까?) -> 배경음악은 spleeter 이용. 일단 펭수 유투브에서 잘라놓음(폴더로 옮겨 놓음).  양희은 목소리는 1000개 파일 40분 가량 데이터 크롤링해 놓음. 펭수처럼 배경음악 제거 작업 진행중.
-RNN 모델을 활용하고 있으며, MusDB 라이브러리를 사용해서 사용자가 추가적으로 해당 모델을 학습시킬 수 있다. -> 성능향상의 여지 있음.
-+ 양희은 라디오 음성 크롤링 후, 음악 제거 작업 완료
 
 ---
 
-# 2. inaSpeechSegmenter : 스피치(남/여), 뮤직, 노이즈 이 3가지를 잘 분리해주는 모델.
 
-펭수 목소리 분리해서, csv파일로  start, end time정리한 값을 받는다(ina_speech_segmenter.py 파일 수정 및 indexing_data.py 스크립트 작성). 이때, 그냥 media 폴더에 펭수 유투브 영상 82개 (파일명 안 바꾸고 그냥 통채로) 넣어버리면 알아서 작업해 준다. -> CNN을 기반으로 한 모델을 활용했다.
-+ 양희은 라디오 음성 음악제거한 파일을 다시 Female음성만 분리해서 저장해 놓았다.
+### 1. Spleeter : 음악 소리, 배경음악 제거 
+
+배경음악 제거 작업은 [**spleeter** 라이브러리](https://github.com/deezer/spleeter) 이용(RNN Based).
+
+테스트용으로, spleeter에서 제공하는 `pretrained_model`을 사용할 수 있고, 스크립트 작성은 매우 간단합니다. 다만 `pretrained_model`을 불러올때 SSL에러가 뜨는 경우가 있어 직접 `wget`으로 `pretrained_model`을 받아오는 게 더 편할 수 있습니다.
+
+성능향상을 위해 [MusDB](https://sigsep.github.io/datasets/musdb.html)를 이용해 학습을 추가적으로 시킬 수도 있습니다.
+
+> 현재 작업 상태 : 일단 펭수 유투브에서 분리 작업 완료. 양희은 라디오 음성 파일은 1000개 파일 X 40분 가량 데이터 크롤링한 후, 배경음악 제거 작업 완료.
+
 
 ---
 
-#3. Audacity 방식으로 효과음 제거하기? 혹은 SFX의 특징을 잡아내서 지워버리는 건 어떨까? : 
+
+### 2. inaSpeechSegmenter : 스피치(남/여), 뮤직, 사일런스 분리
+
+[**inaSpeechSegmenter**](https://github.com/ina-foss/inaSpeechSegmenter)는 SMN(Speech, Music, NoEnergy)로 음성 파일을 분리해낼 수 있습니다(CNN based). 이때, Speech는 다시 Male, Female화자로 구분해낼 수 있습니다.
+
+inaSpeechSegmenter를 이용하면, 각 항목(Speech, Music, NoEnergy)들의 start, end time 값을 csv 파일로 저장할 수 있습니다. 위와 마찬가지로 간단한 코드 수정 및 스크립트 작성으로 각 파일별로 사람의 음성만 뽑아낼 수 있습니다. 일단 그냥 아무 영상만 넣으면 알아서 파일명을 인덱싱 한 다음, 다시 항목별(Male, Female, Music, NoEnergy)로 슬라이스 한 결과를 저장할 수 있는 스크립트를 만들어 놓았습니다.
+
+> 현재 작업 상태 : 먼저 펭수 목소리 분리를 위해, 남성(Male)을 기준으로 음성을 잘랐다(pydub 라이브러리 이용). 이때, 발화의 최소 지속 시간(예: 1초, 1.5초, ...)은 사용자가 조정을 통해 어느 경우가 성능이 더 좋을지 비교해 볼 수 있을 것 같습니다(예 - 0.3초 가량 지속되는 유행어를 포함시키니 성능이 향상되었다 등등). <small>양희은 라디오 음성 음악제거한 파일을 다시 Female음성만 분리해서 저장해 놓았습니다.</small>
+
+
+---
+
+
+### 3. Noise Reduction : 잡음 제거 방법 연구
+
+먼저, 잡음 제거에 있어 *one ring to rule them all...* 같은 것은 없다는 것을 알 수 있었습니다. 그래도 시도해 본 결과를 간단히 언급하도록 하겠습니다.
+
+#### 3. Audacity 방식으로 효과음 제거하기? 혹은 SFX의 특징을 잡아내서 지워버리는 건 어떨까? : 
 
 Numpy array 로 변환을 시킨 다음에, SFX의 Array 특징을 잡아내서 제거하는 코드를 짜볼 수도 있음. 그런데 소리가 중첩될 경우, 해당하는 SFX효과의 Numpy array만 제거한다는 것이 어떤 의미인지 조금 연구를 해봐야 함.
 
