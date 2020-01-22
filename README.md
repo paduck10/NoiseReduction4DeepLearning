@@ -1,11 +1,17 @@
 # NoiseReduction4DeepLearning
+
 NoiseReduction4DeepLearning - It automates the speech segment and noise reduction process mainly used for Deep Learning dataset
+
+
+<br></br>
+---
+
 
 ## WorkFlow 정리 :
 
+
 ---
 
-<br></br>
 
 ### 0. 크롤링 작업 :
 
