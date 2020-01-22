@@ -11,6 +11,7 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 
 펭수 영상(90개), 양희은 라디오 음성(1000)개 크롤링. 파이썬 셀레니엄, 웹브라우저 모듈을 이용했습니다.
 
+> 현재 작업 상태 : \\10.114.72.73\hdd 에 옮겨 놓았습니다.
 
 <br></br>
 ---
