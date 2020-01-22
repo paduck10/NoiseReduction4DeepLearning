@@ -82,7 +82,7 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 
 ### 5. 화자분리(Speaker 분리) : Voice Filter, Resemblyzer
 
-먼저 [구글에서 2019년에 발표한 Voice Filter](https://google.github.io/speaker-id/publications/VoiceFilter/)를 복습해 보았습니다. 기본 방식은 Noise와 Voice가 Mixed된 파일에서 Noise를 마스킹하는 것이라면, VoiceFilter는 미리 학습된(임베딩된) 사용자의 d-Vector를 이용해 Mixed된 파일에서 Voice를 추출하는 방식입니다. 구글에서는 상당한 성능 향상을 보인다고 발표했습니다. 다만, 아직 변변한 구현체가 있는지는 잘 모르겠습니다.  [#1](https://github.com/mindslab-ai/voicefilter). [#2](https://github.com/edwardyoon/voicefilter) [#3](https://github.com/funcwj/voice-filter)
+먼저 [구글에서 2019년에 발표한 Voice Filter](https://google.github.io/speaker-id/publications/VoiceFilter/)를 복습해 보았습니다. 기본 방식은 Noise와 Voice가 Mixed된 파일에서 Noise를 마스킹하는 것이라면, VoiceFilter는 미리 학습된(임베딩된) 사용자의 d-Vector를 이용해 Mixed된 파일에서 Voice를 추출하는 방식입니다. 구글에서는 상당한 성능 향상을 보인다고 발표했습니다. 다만, 아직 변변한 구현체가 있는지는 잘 모르겠습니다. 찾아본 구현체들 : [#1](https://github.com/mindslab-ai/voicefilter) [#2](https://github.com/edwardyoon/voicefilter) [#3](https://github.com/funcwj/voice-filter)
 
 화자를 분리하는 라이브러리 중, **resemblyzer**라는 좋은 패키지가 있다고 들었는데, 아직 돌려보지는 않았습니다.
 
