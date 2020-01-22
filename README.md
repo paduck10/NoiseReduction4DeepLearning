@@ -4,13 +4,12 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 
 
 <br></br>
----
+
 
 
 ## WorkFlow 정리 :
 
 
----
 
 
 ### 0. 크롤링 작업 :
