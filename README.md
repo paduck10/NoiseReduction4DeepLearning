@@ -17,6 +17,8 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 
 > 현재 작업 상태 : \\10.114.72.73\hdd 에 옮겨 놓았습니다.
 
+> Get it work!
+
 코드는 엄청 crude합니다;;(세팅한 날 돌려놓고 퇴근) Window 환경에서 돌렸습니다. Linux 환경에서는 테스트 해보지 않았습니다!
 위치 : /home/deokgyu.ahn/practice/Resource/Code/yt_crawl/
 
@@ -48,10 +50,38 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 
 성능향상을 위해 [MusDB](https://sigsep.github.io/datasets/musdb.html)를 이용해 학습을 추가적으로 시킬 수도 있습니다.
 
+새로 해당 라이브러리를 사용할 때, `pretrained_model`이 없다는 에러가 뜰텐데, 보안 이슈로 바로 데이터 셋을 받아올 수 없기에 `wget`으로 `pretrained_model`을 받아와야 합니다.
+
 > Get it work!
 
+1. 먼저, 환경 설정을 바꾸어줍니다. `conda activate spleeter`
+
+2. /home/deokgyu.ahn/practice/Resource/Code/voice_separation/spleeter/ 폴더에 있는 `separate_pengsu.py` 파일을 실행시킵니다.
+
+2-2. `separate_pengsu.py`파일의 argparse는 다음과 같습니다 :
+
+- 자르고 싶은 mp3파일들이 위치한 디렉토리 : `-i`
+```
+parser.add_argument('-i', '--input_dir', default = '/home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/media/', help='Type the directory where original youtube files are')
+```
+
+- 음악/보컬 파일로 분리된 mp3파일들이 저장될 디렉토리 : `-o`
+```
+parser.add_argument('-o', '--output_dir', default = '/home/deokgyu.ahn/practice/Resource/Code/voice_separation/spleeter/pengsu_yt_output/', help='Type the output directory. Separated vocal and music files will be stored')
+```
+
+- 사용할 코덱 : `-c`, 기본은 `mp3`입니다.
+```
+parser.add_argument('-c', '--codec', default = 'mp3', help='Choose which codec to use : mp3    , wav, ogg, m4a, wma, flac')
+```
+
+`separate_pengsu.py`파일을 실행시키면(argparse 인자 줘서), 각 파일별로 음악과 보컬이 분리가 됩니다(예 : 파일 명이 1.mp3이면 '1'이라는 폴더에, accompaniment.mp3(음악 파일)과 vocal.mp3(보컬 파일)이 생성되게 됩니다).
 
 
+*참고* : /home/deokgyu.ahn/practice/Resource/Code/voice_separation/spleeter/ 폴더에 `mv_pengsu_vocal_files.py` 스크립트를 실행시키면, `-i` 인자에 위에서 작업한 vocal.mp3, accompaniment.mp3 파일들이 각 폴더별로 들어가 있는 상위 디렉토리를 넣으면, `-o` 인자에 넣은 디렉토리로 vocal.mp3 파일만 가져와서 이동시켜 줍니다(파일명 변경 자동).
+
+
+*참고* : .mp3 파일 이름을 간편하게 인덱싱하는 스크립트(1.mp3, 2.mp3... 등으로) : /home/deokgyu.ahn/practice/Resource/Code/voice_separation/spleeter/ 폴더에 `indexing.py`파일에 `-i`인자를 주면 해당 디렉토리 내의 .mp3 파일 이름들을 1.mp3, 2.mp3 ... 식으로 바꾸어 줍니다.
 
 
 > 현재 작업 상태 : 일단 펭수 유투브에서 분리 작업 완료. 양희은 라디오 음성 파일은 1000개 파일 X 40분 가량 데이터 크롤링한 후, 배경음악 제거 작업 완료.
@@ -69,12 +99,20 @@ inaSpeechSegmenter를 이용하면, 각 항목(Speech, Music, NoEnergy)들의 st
 
 > 현재 작업 상태 : 먼저 펭수 목소리 분리를 위해, 남성(Male)을 기준으로 음성을 잘랐다(pydub 라이브러리 이용). 이때, 발화의 최소 지속 시간(예: 1초, 1.5초, ...)은 사용자가 조정을 통해 어느 경우가 성능이 더 좋을지 비교해 볼 수 있을 것 같습니다(예 - 0.3초 가량 지속되는 유행어를 포함시키니 성능이 향상되었다 등등). <small>양희은 라디오 음성 음악제거한 파일을 다시 Female음성만 분리해서 저장해 놓았습니다.</small>
 
+> Get it work!
+
+1. 먼저 환경 설정을 바꾸어 줍니다. `conda activate speechseg`
+
+2. /home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/scripts/ 폴더에 보면 `ina_speech_segmenter.py`라는 파일이 있습니다. 해당 파일을 실행시키면, 각 .mp3파일 별로 Label을 생성해줍니다
+
+2-2. 
+
 
 <br></br>
 ---
 
 
-### 3. Noise Reduction : 잡음 제거 방법 연구(결론 - Low Pass Filtering)
+### 3. Noise Reduction : 잡음 제거 방법 연구(결론 - Low Pass Filtering or nothing)
 
 먼저, 잡음 제거에 있어 *one ring to rule them all...* 같은 것은 없다는 것을 알 수 있었습니다. 그래도 시도해 본 결과를 간단히 언급하도록 하겠습니다.
 
@@ -112,10 +150,38 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 
 ### 5. 화자분리(Speaker 분리) : Voice Filter, Resemblyzer
 
-먼저 [구글에서 2019년에 발표한 Voice Filter](https://google.github.io/speaker-id/publications/VoiceFilter/)를 복습해 보았습니다. 기본 방식은 Noise와 Voice가 Mixed된 파일에서 Noise를 마스킹하는 것이라면, VoiceFilter는 미리 학습된(임베딩된) 사용자의 d-Vector를 이용해 Mixed된 파일에서 Voice를 추출하는 방식입니다. 구글에서는 상당한 성능 향상을 보인다고 발표했습니다. 다만, 아직 변변한 구현체가 있는지는 잘 모르겠습니다. 찾아본 구현체들 : [#1](https://github.com/mindslab-ai/voicefilter) [#2](https://github.com/edwardyoon/voicefilter) [#3](https://github.com/funcwj/voice-filter)
+##### <Resemblyzer : 보류>
 
-화자를 분리하는 라이브러리 중, **resemblyzer**라는 좋은 패키지가 있다고 들었는데, 아직 돌려보지는 않았습니다.
+화자를 분리하는 라이브러리 중, **resemblyzer**라는 좋은 패키지가 있다고 들어, 돌려보았으나...
 
+별로 성능이 좋지 않아서, 사용하지 않을 예정입니다. 구체적으로는, 다음과 같은 문제가 있습니다.
+
+1. 신뢰도의 문제점
+
+-> 가장 근본적인 문제입니다. Resemblyzer는 먼저 깔끔한 캐릭터의 보이스를 일정 부분 인풋으로 받아서, embedding을 합니다(d-vector, length : 256). 그렇다면 깔끔한 캐릭터의 보이스를 다시 인풋으로 넣어서(간단히 말하자면 트레이닝 데이터로 훈련을 하는 느낌입니다) 지금 화자가 내가 voice를 embedding한 그 화자가 맞는지를 판단하면, 이론적으로는 confident한 수치가 계속 나와야 합니다(voice embedding을 한 화자가 말하고 있음이 확실한 경우를 confident, 애매한 경우를 uncertain이라고 분류하고 있습니다). 그러나 훈련 데이터를 돌려봤음에도 중간 중간 uncertain이 관측이 되며, A화자와 B화자가 순차적으로 대화하는 경우에서도 매우 낮은 성능을 보입니다. 실제로 그런 용도로는 사용할 수 없습니다.
+
+
+-> 테스트셋(voice embedding을 하는 데 사용하지 않은 음성 파일)에 Resemblyzer를 적용하여 해당 화자가 말하고 있는지 아닌지를 체크할 때는 그 정도가 더 심각합니다.
+
+
+2. 결국 수작업이 필요
+
+
+-> Minor한 이슈이기는 합니다. 다만, voice embedding을 위해 일정 분량의 clean한 voice가 필요하다는 것이 단점이라면 단점입니다.
+
+
+3. 그럼에도 불구하고
+
+-> 의의는 있습니다. 신뢰도가 너무나도 낮은 파일의 경우는 걸러내는 것이 가능합니다. 예를 들어, 앞의 1번(spleeter)와 2번(inaSpeechSegmenter)작업을 거치면 `남성`화자 정도의 음악 slice들을 만들 수 있는데, Resemblyzer를 이용하면 '펭수가 전혀 아닐 가능성이 높은 일부 음악파일들' 정도는 제거할 수 있습니다.
+
+-> 방법은 크게 두 가지 입니다. 그 중 좋은 방법은, Clean한 펭수 보이스를 이용한 embedding 벡터와 각 slice파일들의 embedding 벡터를 비교해서 유사도가 심각하게 떨어지는 녀석들을 삭제해 버리는 방식입니다.
+
+
+##### Voice Filter : Google, save us
+
+[구글에서 2019년에 발표한 Voice Filter](https://google.github.io/speaker-id/publications/VoiceFilter/)를 복습해 보았습니다. 기본 방식은 Noise와 Voice가 Mixed된 파일에서 Noise를 마스킹하는 것이라면, VoiceFilter는 미리 학습된(임베딩된) 사용자의 d-Vector를 이용해 Mixed된 파일에서 Voice를 추출하는 방식입니다. 구글에서는 상당한 성능 향상을 보인다고 발표했습니다. 다만, 아직 변변한 구현체가 있는지는 잘 모르겠습니다. 찾아본 구현체들 : [#1](https://github.com/mindslab-ai/voicefilter) [#2](https://github.com/edwardyoon/voicefilter) [#3](https://github.com/funcwj/voice-filter)
+
+그 중, 쓸만하다고 생각하는 구현체가 있어 돌려보았습니다.
 
 <br></br>
 ---
