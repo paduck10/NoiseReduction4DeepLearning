@@ -142,11 +142,30 @@ parser.add_argument('-d', '--vad_engine', choices=['sm', 'smn'], default='smn', 
 parser.add_argument('-g', '--detect_gender', choices = ['true', 'false'], default='True', help="(default: 'true'). If set to 'true', segments detected as speech will be splitted into 'male' and 'female' segments. If set to 'false', segments corresponding to speech will be labelled as 'speech' (faster)")
 ```
 
-3. 위에서 생성한 csv 파일을 바탕으로, 실제 음성 파일을 잘라보겠습니다. /home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/scripts/ 폴더에 `csv_to_sliced.py`라는 파일을 이용하면, 
+3. 위에서 생성한 csv 파일을 바탕으로, 실제 음성 파일을 잘라보겠습니다. /home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/scripts/ 폴더에 `csv_to_sliced.py`라는 파일을 이용하면, 다음과 같이 파일들을 잘라낼 수 있습니다.
 
+![image](https://user-images.githubusercontent.com/26838115/73430351-30fdc100-4381-11ea-9f29-75dd25a75511.png)
 
+3-2. `csv_to_sliced.py` 인자 설명 :
 
+- slice 최소 시간 : `-m`, csv 파일에서 준 label에서, 잘라서 저장할 파일의 최소 시간을 조정할 수 있습니다. 기본값은 1.5초입니다.
+```parser.add_argument('-m', '--minsec', default="1.5", help='Minial second in terms of slicing the speech, used for training. It is float type value, but you can just type integer, e.g. "-m 1"', type=float, required=False)
+```
 
+- 자를 mp3 파일들 : `-i`, 자를 mp3 vocal 파일들이 들어 있는 디렉토리를 인풋으로 넣어줍니다.
+```
+parser.add_argument('-i', '--in_path', default='/home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/media/', help='Default : media folder! Path where the original mp3 files are!')
+```
+
+- 잘라진 아웃풋들이 저장될 위치 : `-o`
+ ```
+ parser.add_argument('-o', '--out_path', default='/home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/dataset_sliced/', help='Default : data_sliced folder. If you want to customize your output directory file, go ahead.')
+ ```
+ 
+ - 각 mp3 파일들(잘라질)의 이름과 동일한 파일명의 csv 파일들의 위치 : `-c`
+```
+parser.add_argument('-c' '--csv_path', default='/home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/dataset_sliced/out/', help='Directory where csv files are in!')
+```
 
 > 현재 작업 상태 : 먼저 펭수 목소리 분리를 위해, 남성(Male)을 기준으로 음성을 잘랐다(pydub 라이브러리 이용). 이때, 발화의 최소 지속 시간(예: 1초, 1.5초, ...)은 사용자가 조정을 통해 어느 경우가 성능이 더 좋을지 비교해 볼 수 있을 것 같습니다(예 - 0.3초 가량 지속되는 유행어를 포함시키니 성능이 향상되었다 등등). <small>양희은 라디오 음성 음악제거한 파일을 다시 Female음성만 분리해서 저장해 놓았습니다.</small>
 
