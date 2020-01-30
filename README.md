@@ -21,11 +21,13 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 위치 : /home/deokgyu.ahn/practice/Resource/Code/yt_crawl/
 
 **펭수 유투브 영상 다운 : `python mp3window.py` 실행**
-**양희은 유투브 라디오 파일 다운 : ` ` 실행**
+-> pengsu_youtube.txt에 저장된 유투브 링크들을 읽어서, 영상 한 개씩 음성 파일을 다운로드한다. (Window 환경)
+-> `pengsu_youtube.txt`파일에 저장된 각 유투브 링크는 콤마(,)로, 혹은 `\r\n`으로 구별되어야 함!
 
--> pengsu_youtube.txt에 저장된 유투브 링크들을 읽어서, 영상 한 개씩 음성 파일을 다운로드한다. `pengsu_youtube.txt`파일에 저장된 각 유투브 링크는 콤마(,)로, 혹은 `\r\n`으로 구별되어야 함!
-
-
+**양희은 유투브 라디오 파일 다운 : `python ppang_radio_down.py` 실행**
+-> 팟빵에서 양희은 라디오 파일 링크들을 긁어와서, `yang_radio.txt`파일에 저장합니다. (Window환경)
+-> /home/deokgyu.ahn/practice/Resource/Code/yt_crawl/ 폴더에 있는 `down_yang_mp3.py`파일을 돌리면 아까 얻은 링크들을 해당 링크들을 `yang_radio.txt` 파일에서 불러와서 라디오 음성파일들을 다운로드 합니다(`wget`이용) (Linux 환경)
+-> `ppang_radio_down.py` 파일에는 `mp3Link` 라는 변수가 있습니다. 해당 변수를 팟빵닷컴에서 찾아 바꿔주기만 하면(예 : 양희은은 http://www.podbbang.com/ch/88 이고, 컬투쇼는 http://www.podbbang.com/ch/3866 입니다) 원하는 라디오 채널에서 음성파일을 다운로드 받을 수 있습니다.
 
 <br></br>
 ---
