@@ -11,12 +11,21 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 
 
 
-
 ### 0. 크롤링 작업 :
 
 펭수 영상(90개), 양희은 라디오 음성(1000)개 크롤링. 파이썬 셀레니엄, 웹브라우저 모듈을 이용했습니다.
 
 > 현재 작업 상태 : \\10.114.72.73\hdd 에 옮겨 놓았습니다.
+
+코드는 엄청 crude합니다;;(세팅한 날 돌려놓고 퇴근) Window 환경에서 돌렸습니다. Linux 환경에서는 테스트 해보지 않았습니다!
+위치 : /home/deokgyu.ahn/practice/Resource/Code/yt_crawl/
+
+**펭수 유투브 영상 다운 : `python mp3window.py` 실행**
+**양희은 유투브 라디오 파일 다운 : ` ` 실행**
+
+-> pengsu_youtube.txt에 저장된 유투브 링크들을 읽어서, 영상 한 개씩 음성 파일을 다운로드한다. `pengsu_youtube.txt`파일에 저장된 각 유투브 링크는 콤마(,)로, 혹은 `\r\n`으로 구별되어야 함!
+
+
 
 <br></br>
 ---
@@ -29,6 +38,12 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 테스트용으로, spleeter에서 제공하는 `pretrained_model`을 사용할 수 있고, 스크립트 작성은 매우 간단합니다. 다만 `pretrained_model`을 불러올때 SSL에러가 뜨는 경우가 있어 직접 `wget`으로 `pretrained_model`을 받아오는 게 더 편할 수 있습니다.
 
 성능향상을 위해 [MusDB](https://sigsep.github.io/datasets/musdb.html)를 이용해 학습을 추가적으로 시킬 수도 있습니다.
+
+> Get it work!
+
+
+
+
 
 > 현재 작업 상태 : 일단 펭수 유투브에서 분리 작업 완료. 양희은 라디오 음성 파일은 1000개 파일 X 40분 가량 데이터 크롤링한 후, 배경음악 제거 작업 완료.
 
