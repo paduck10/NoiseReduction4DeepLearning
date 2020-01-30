@@ -15,7 +15,6 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 
 펭수 영상(90개), 양희은 라디오 음성(1000)개 크롤링. 파이썬 셀레니엄, 웹브라우저 모듈을 이용했습니다.
 
-> 현재 작업 상태 : \\10.114.72.73\hdd 에 옮겨 놓았습니다.
 
 > Get it work!
 
@@ -37,6 +36,8 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 -> `ppang_radio_down.py` 파일에는 `mp3Link` 라는 변수가 있습니다. 해당 변수를 팟빵닷컴에서 찾아 바꿔주기만 하면(예 : 양희은은 http://www.podbbang.com/ch/88 이고, 컬투쇼는 http://www.podbbang.com/ch/3866 입니다) 원하는 라디오 채널에서 음성파일을 다운로드 받을 수 있습니다.
 
 -> 근데 링크가 달라지면 인덱스를 조정해 주어야 합니다.. `page_num`이라는 변수는, 해당 라디오 링크의 총 페이지 수를 의미합니다. 그래서 `page_num`이 100이면 100페이지까지 있는 음성파일들(총 1000개)은 안전하게 다운 가능하지만, 해당 라디오 진행자가 파일을 300개 정도만 올렸다고 한다면(예 : 총 336개 올림) `page_num`변수를 `336 // 10 = 33`으로 바꾸어 주어야 에러가 나지 않습니다.
+
+> 현재 작업 상태 : \\10.114.72.73\hdd 에 옮겨 놓았습니다.
 
 <br></br>
 ---
@@ -77,6 +78,8 @@ parser.add_argument('-c', '--codec', default = 'mp3', help='Choose which codec t
 
 `separate_pengsu.py`파일을 실행시키면(argparse 인자 줘서), 각 파일별로 음악과 보컬이 분리가 됩니다(예 : 파일 명이 1.mp3이면 '1'이라는 폴더에, accompaniment.mp3(음악 파일)과 vocal.mp3(보컬 파일)이 생성되게 됩니다).
 
+![image](https://user-images.githubusercontent.com/26838115/73428903-a4053880-437d-11ea-845c-265f7678d366.png)
+
 
 *참고* : /home/deokgyu.ahn/practice/Resource/Code/voice_separation/spleeter/ 폴더에 `mv_pengsu_vocal_files.py` 스크립트를 실행시키면, `-i` 인자에 위에서 작업한 vocal.mp3, accompaniment.mp3 파일들이 각 폴더별로 들어가 있는 상위 디렉토리를 넣으면, `-o` 인자에 넣은 디렉토리로 vocal.mp3 파일만 가져와서 이동시켜 줍니다(파일명 변경 자동).
 
@@ -97,7 +100,14 @@ parser.add_argument('-c', '--codec', default = 'mp3', help='Choose which codec t
 
 inaSpeechSegmenter를 이용하면, 각 항목(Speech, Music, NoEnergy)들의 start, end time 값을 csv 파일로 저장할 수 있습니다. 위와 마찬가지로 간단한 코드 수정 및 스크립트 작성으로 각 파일별로 사람의 음성만 뽑아낼 수 있습니다. 일단 그냥 아무 영상만 넣으면 알아서 파일명을 인덱싱 한 다음, 다시 항목별(Male, Female, Music, NoEnergy)로 슬라이스 한 결과를 저장할 수 있는 스크립트를 만들어 놓았습니다.
 
-> 현재 작업 상태 : 먼저 펭수 목소리 분리를 위해, 남성(Male)을 기준으로 음성을 잘랐다(pydub 라이브러리 이용). 이때, 발화의 최소 지속 시간(예: 1초, 1.5초, ...)은 사용자가 조정을 통해 어느 경우가 성능이 더 좋을지 비교해 볼 수 있을 것 같습니다(예 - 0.3초 가량 지속되는 유행어를 포함시키니 성능이 향상되었다 등등). <small>양희은 라디오 음성 음악제거한 파일을 다시 Female음성만 분리해서 저장해 놓았습니다.</small>
+결과 :
+
+![image](https://user-images.githubusercontent.com/26838115/73429219-7240a180-437e-11ea-8aa1-f72d36507048.png)
+
+내부 : 
+
+![image](https://user-images.githubusercontent.com/26838115/73429162-56d59680-437e-11ea-9509-b1c8f8aab75a.png)
+
 
 > Get it work!
 
@@ -105,8 +115,40 @@ inaSpeechSegmenter를 이용하면, 각 항목(Speech, Music, NoEnergy)들의 st
 
 2. /home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/scripts/ 폴더에 보면 `ina_speech_segmenter.py`라는 파일이 있습니다. 해당 파일을 실행시키면, 각 .mp3파일 별로 Label을 생성해줍니다
 
-2-2. 
+2-2. `ina_speech_segmenter.py`인자 설명 :
 
+- 인풋 파일(almost obsolete) : `-i`, 인풋 파일(1개)를 넣으면, 해당 파일을 분석해 줍니다. 1개 짜리 쓸일이 없으니, 사실 거의 의미가 없습니다. 생략하시면 됩니다.
+
+```
+parser.add_argument('-i', '--input', nargs='+', help='Input media to analyse. May be a full path to a media (/home/david/test.mp3), a list of full paths (/home/david/test.mp3 /tmp/mymedia.avi), or a regex input pattern ("/home/david/myaudiobooks/*.mp3")', required=False)
+```
+- 인풋 디렉토리 : `-r`, 1에서 작업한 보컬 파일들이 사는 곳의 경로를 넣어 주시면 됩니다.
+ ```
+ parser.add_argument('-r', '--input_dir', default='/home/deokgyu.ahn/practice/Resource/Code/speechse    g/inaSpeechSegmenter/media', help='(Default : /home/deokgyu.ahn/practice/Resource/Code/speechseg/in    aSpeechSegmenter/media) Input media DIRECTORY where all the media files are in!')
+ ```
+ 
+ - 아웃풋 디렉토리 : `-o`, 분석을 완료한 csv 파일들이 저장될 위치입니다.
+ ```
+parser.add_argument('-o', '--output_directory', default='/home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/media/out', help='Directory used to store segmentations. Resulting segmentations have same base name as the corresponding input media, with csv extension. Ex: mymedia.MPG will result in mymedia.csv', required=False)
+```
+
+- 엔진 : `-d`, `sm`을 선택하면 화자와 음악만 분리를 하고, `smn`을 선택하면 남성/여성/음악으로 레이블을 분리합니다. 기본값은 `smn`입니다. 생략하셔도 됩니다.
+```
+parser.add_argument('-d', '--vad_engine', choices=['sm', 'smn'], default='smn', help="Voice activity detection (VAD) engine to be used (default: 'smn'). 'smn' split signal into 'speech', 'music' and 'noise' (better). 'sm' split signal into 'speech' and 'music' and do not take noise into account, which is either classified as music or speech. Results presented in ICASSP were obtained using 'sm' option")
+```
+
+- 성별 체크 : `-g`, 이것도 그냥 생략하셔도 됩니다.
+```
+parser.add_argument('-g', '--detect_gender', choices = ['true', 'false'], default='True', help="(default: 'true'). If set to 'true', segments detected as speech will be splitted into 'male' and 'female' segments. If set to 'false', segments corresponding to speech will be labelled as 'speech' (faster)")
+```
+
+3. 위에서 생성한 csv 파일을 바탕으로, 실제 음성 파일을 잘라보겠습니다. /home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/scripts/ 폴더에 `csv_to_sliced.py`라는 파일을 이용하면, 
+
+
+
+
+
+> 현재 작업 상태 : 먼저 펭수 목소리 분리를 위해, 남성(Male)을 기준으로 음성을 잘랐다(pydub 라이브러리 이용). 이때, 발화의 최소 지속 시간(예: 1초, 1.5초, ...)은 사용자가 조정을 통해 어느 경우가 성능이 더 좋을지 비교해 볼 수 있을 것 같습니다(예 - 0.3초 가량 지속되는 유행어를 포함시키니 성능이 향상되었다 등등). <small>양희은 라디오 음성 음악제거한 파일을 다시 Female음성만 분리해서 저장해 놓았습니다.</small>
 
 <br></br>
 ---
@@ -135,13 +177,16 @@ Low pass filtering 을 적용해 보았으나, 정성적으로는 효과가 좋�
 notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 이용하면 원하는 노이즈 패턴을 분석했을 때, 상대적으로 효과적으로 특정 피치의 잡음을 제거할 수 있었습니다(예: 6000Hz + Q인자<잘라낼 노치의 폭> 기준으로  6000Hz 근처의 음역대의 소리를 제거할 수 있음을 확인함). 하지만 어떤 음역대를 잘라야 해당 브금/노이즈를 제거할 수 있을지는 좀더 시도해 보아야 하며, 손이 굉장히 많이 가고, Frequency 기준점을 옮겨가며 같은 파일을 반복적으로 필터링해야 합니다. 위에서 설명한 Low Pass Filtering이 훨씬 효율적입니다.
 
 
+> 저보다 지상님이 해 놓으신게 더 나을 것 같습니다..
+
 
 <br></br>
 ---
 
-### 4. 톤 분리 : Multispeaker Model 응용
+### 4. 톤 분리 : Multispeaker Model 응용 -> 핵심은 Feature extraction!
 
-기본적으로는 화난 톤/일반 톤으로 분리하고, 더 나아가서는 각 톤마다 클러스터링을 통해 감정표현을 할 수 있도록 하는 연구입니다. 펭수나 짱구 같은 캐릭터 연기의 경우 상당히 어려운 점이 있습니다. 톤이나 dB, 피치 등으로 구분하기가 쉽지 않기 때문입니다.
+기본적으로는 화난 톤/일반 톤으로 분리하고, 더 나아가서는 각 톤마다 클러스터링을 통해 감정표현을 할 수 있도록 하는 연구입니다. 펭수나 짱구 같은 캐릭터 연기의 경우 상당히 어려운 점이 있습니다. 톤이나 dB, 피치 등으로 구분하기가 쉽지 않기 때문입니다. 그래서 딥러닝을 이용한 Feature extraction 방식을 적용하기로 결정했습니다.
+
 
 
 
@@ -175,6 +220,8 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 -> 의의는 있습니다. 신뢰도가 너무나도 낮은 파일의 경우는 걸러내는 것이 가능합니다. 예를 들어, 앞의 1번(spleeter)와 2번(inaSpeechSegmenter)작업을 거치면 `남성`화자 정도의 음악 slice들을 만들 수 있는데, Resemblyzer를 이용하면 '펭수가 전혀 아닐 가능성이 높은 일부 음악파일들' 정도는 제거할 수 있습니다.
 
 -> 방법은 크게 두 가지 입니다. 그 중 좋은 방법은, Clean한 펭수 보이스를 이용한 embedding 벡터와 각 slice파일들의 embedding 벡터를 비교해서 유사도가 심각하게 떨어지는 녀석들을 삭제해 버리는 방식입니다.
+
+-> 실험 및 테스트 : `conda activate resemblyzer` -> /home/deokgyu.ahn/practice/Resource/Code/speaker_separation/Resemblyzer/ 폴더에서 테스트
 
 
 ##### Voice Filter : Google, save us
