@@ -34,6 +34,8 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 
 -> `ppang_radio_down.py` 파일에는 `mp3Link` 라는 변수가 있습니다. 해당 변수를 팟빵닷컴에서 찾아 바꿔주기만 하면(예 : 양희은은 http://www.podbbang.com/ch/88 이고, 컬투쇼는 http://www.podbbang.com/ch/3866 입니다) 원하는 라디오 채널에서 음성파일을 다운로드 받을 수 있습니다.
 
+-> 근데 링크가 달라지면 인덱스를 조정해 주어야 합니다.. `page_num`이라는 변수는, 해당 라디오 링크의 총 페이지 수를 의미합니다. 그래서 `page_num`이 100이면 100페이지까지 있는 음성파일들(총 1000개)은 안전하게 다운 가능하지만, 해당 라디오 진행자가 파일을 300개 정도만 올렸다고 한다면(예 : 총 336개 올림) `page_num`변수를 `336 // 10 = 33`으로 바꾸어 주어야 에러가 나지 않습니다.
+
 <br></br>
 ---
 
