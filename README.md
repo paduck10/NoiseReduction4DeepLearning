@@ -167,6 +167,8 @@ parser.add_argument('-i', '--in_path', default='/home/deokgyu.ahn/practice/Resou
 parser.add_argument('-c' '--csv_path', default='/home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/dataset_sliced/out/', help='Directory where csv files are in!')
 ```
 
+*참고* : 펭수 라디오 파일(pengsu_radio 폴더에 있는 음성파일들)은 성능이 매우 좋지 않음. [ffmpeg-normalize 라이브러리](https://github.com/slhck/ffmpeg-normalize/blob/master/README.md)를 사용해서 volume normalization을 하는 게 좋지 않을까? -> 이건 다른 dataset의 경우에도 universal하게 적용 가능!
+
 > 현재 작업 상태 : 먼저 펭수 목소리 분리를 위해, 남성(Male)을 기준으로 음성을 잘랐다(pydub 라이브러리 이용). 이때, 발화의 최소 지속 시간(예: 1초, 1.5초, ...)은 사용자가 조정을 통해 어느 경우가 성능이 더 좋을지 비교해 볼 수 있을 것 같습니다(예 - 0.3초 가량 지속되는 유행어를 포함시키니 성능이 향상되었다 등등). <small>양희은 라디오 음성 음악제거한 파일을 다시 Female음성만 분리해서 저장해 놓았습니다.</small>
 
 <br></br>
