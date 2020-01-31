@@ -239,9 +239,9 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 > Improvements?
 
-1. 데이터 셋 늘리기
+1. 데이터 셋 늘리기 (The more, the better!)
 
-`sample.py`에서는 ravdess dataset
+`sample.py`에서는 ravdess dataset을 활용하여 간단한 테스트를 진행했습니다. `duck_emotion.py`에서는 savee dataset과 emo_DB dataset을 추가한 custom dataset을 이용하여 훈련을 시킵니다. Clustering은 neutral와 anger 두 가지 케이스로 나누어 진행하였습니다.
 
 
 2. 딥러닝 모델 개선
