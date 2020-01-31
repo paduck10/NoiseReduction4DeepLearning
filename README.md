@@ -215,7 +215,7 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 
 1. 먼저, 각 오디오 파일의 Feature를 extract합니다.
 
-2. 딥러닝 모델을 구축합니다. `sample.py`파일에서는, 가장 기초적인 MLPClassifer모델을 활용했습니다([scikit-learn라이브러리 이용](https://github.com/scikit-learn/scikit-learn))
+2. 딥러닝 모델을 구축합니다. `sample.py`파일에서는, 가장 기초적인 MLPClassifier모델을 활용했습니다([scikit-learn라이브러리 이용](https://github.com/scikit-learn/scikit-learn)) (MLPClassifier : Multi-layer Perceptron Classifier -> Use LBFGS or stochastic gradient descent as optimizer. -> feedforward ANN model)
 
 3. 데이터셋을 넣고, 훈련을 시킵니다!
 
