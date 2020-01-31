@@ -316,6 +316,16 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 그 중, [쓸만하다고 생각하는 구현체](https://github.com/mindslab-ai/voicefilter)가 있어 돌려보았습니다.
 
+위 링크의 README를 따라가시면 됩니다! 다만, **Prepare dataset**부분에서, 4번 항목 *Preprodcess wav files* 의 경우, 아래와 같은 명령어를 입력해 주세요.
+
+```
+python generator.py -c ./config/config.yaml -d /home/deokgyu.ahn/practice/Resource/Code/speaker_separation/voicefilter/datasets/LibriSpeech -o /home/deokgyu.ahn/practice/Resource/Code/speaker_separation/voicefilter/datasets/normalized_dataset/ -p 16 >out.log &
+```
+
+(`-o` 부분을 생략하면 `random.sample`에서 ValueError가 뜹니다. Librispeech 폴더의 디렉토리를 넣어 주시면 됩니다.)
+
+(`-p`의 경우, cpu 갯수를 써 주시면 됩니다. `python; import multiprocessor as mp; mp.cpu_count()`로 갯수 확인.)
+
 
 
 <br></br>
