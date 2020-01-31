@@ -15,6 +15,7 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 
 펭수 영상(90개), 양희은 라디오 음성(1000)개 크롤링. 파이썬 셀레니엄, 웹브라우저 모듈을 이용했습니다.
 
+<br></br>
 
 > Get it work!
 
@@ -27,6 +28,8 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 
 -> `pengsu_youtube.txt`파일에 저장된 각 유투브 링크는 콤마(,)로, 혹은 `\r\n`으로 구별되어야 함!
 
+<br></br>
+
 **양희은 유투브 라디오 파일 다운 : `python ppang_radio_down.py` 실행**
 
 -> 팟빵에서 양희은 라디오 파일 링크들을 긁어와서, `yang_radio.txt`파일에 저장합니다. (Window환경)
@@ -36,6 +39,8 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 -> `ppang_radio_down.py` 파일에는 `mp3Link` 라는 변수가 있습니다. 해당 변수를 팟빵닷컴에서 찾아 바꿔주기만 하면(예 : 양희은은 http://www.podbbang.com/ch/88 이고, 컬투쇼는 http://www.podbbang.com/ch/3866 입니다) 원하는 라디오 채널에서 음성파일을 다운로드 받을 수 있습니다.
 
 -> 근데 링크가 달라지면 인덱스를 조정해 주어야 합니다.. `page_num`이라는 변수는, 해당 라디오 링크의 총 페이지 수를 의미합니다. 그래서 `page_num`이 100이면 100페이지까지 있는 음성파일들(총 1000개)은 안전하게 다운 가능하지만, 해당 라디오 진행자가 파일을 300개 정도만 올렸다고 한다면(예 : 총 336개 올림) `page_num`변수를 `336 // 10 = 33`으로 바꾸어 주어야 에러가 나지 않습니다.
+
+<br></br>
 
 > 현재 작업 상태 : \\10.114.72.73\hdd 에 옮겨 놓았습니다.
 
@@ -52,6 +57,10 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 성능향상을 위해 [MusDB](https://sigsep.github.io/datasets/musdb.html)를 이용해 학습을 추가적으로 시킬 수도 있습니다.
 
 새로 해당 라이브러리를 사용할 때, `pretrained_model`이 없다는 에러가 뜰텐데, 보안 이슈로 바로 데이터 셋을 받아올 수 없기에 `wget`으로 `pretrained_model`을 받아와야 합니다.
+
+
+<br></br>
+
 
 > Get it work!
 
@@ -87,6 +96,8 @@ parser.add_argument('-c', '--codec', default = 'mp3', help='Choose which codec t
 *참고* : .mp3 파일 이름을 간편하게 인덱싱하는 스크립트(1.mp3, 2.mp3... 등으로) : /home/deokgyu.ahn/practice/Resource/Code/voice_separation/spleeter/ 폴더에 `indexing.py`파일에 `-i`인자를 주면 해당 디렉토리 내의 .mp3 파일 이름들을 1.mp3, 2.mp3 ... 식으로 바꾸어 줍니다.
 
 
+<br></br>
+
 > 현재 작업 상태 : 일단 펭수 유투브에서 분리 작업 완료. 양희은 라디오 음성 파일은 1000개 파일 X 40분 가량 데이터 크롤링한 후, 배경음악 제거 작업 완료.
 
 
@@ -108,6 +119,7 @@ inaSpeechSegmenter를 이용하면, 각 항목(Speech, Music, NoEnergy)들의 st
 
 ![image](https://user-images.githubusercontent.com/26838115/73429162-56d59680-437e-11ea-9509-b1c8f8aab75a.png)
 
+<br></br>
 
 > Get it work!
 
@@ -167,7 +179,11 @@ parser.add_argument('-i', '--in_path', default='/home/deokgyu.ahn/practice/Resou
 parser.add_argument('-c' '--csv_path', default='/home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/dataset_sliced/out/', help='Directory where csv files are in!')
 ```
 
+<br></br>
+
 *참고* : 펭수 라디오 파일(pengsu_radio 폴더에 있는 음성파일들)은 성능이 매우 좋지 않음. [ffmpeg-normalize 라이브러리](https://github.com/slhck/ffmpeg-normalize/blob/master/README.md)를 사용해서 volume normalization을 하는 게 좋지 않을까? -> 이건 다른 dataset의 경우에도 universal하게 적용 가능!
+
+<br></br>
 
 > 현재 작업 상태 : 먼저 펭수 목소리 분리를 위해, 남성(Male)을 기준으로 음성을 잘랐다(pydub 라이브러리 이용). 이때, 발화의 최소 지속 시간(예: 1초, 1.5초, ...)은 사용자가 조정을 통해 어느 경우가 성능이 더 좋을지 비교해 볼 수 있을 것 같습니다(예 - 0.3초 가량 지속되는 유행어를 포함시키니 성능이 향상되었다 등등). <small>양희은 라디오 음성 음악제거한 파일을 다시 Female음성만 분리해서 저장해 놓았습니다.</small>
 
@@ -191,12 +207,15 @@ Low pass filtering 을 적용해 보았으나, 정성적으로는 효과가 좋�
 
 5000Hz 기준으로 36dB의 롤백을 주고 2-3회 Pass를 시키면 스펙트로그램상으로는 *치지직...* 하는 잡음은 거의 제거할 수 있는 것 같습니다. 다만 학습시킬때 Normalization작업(증폭 등)이 필요할 것 같습니다. 이 부분은 실험을 통해 파악해야 할 것 같습니다.
 
+<br></br>
+
 > 현재는 가장 시도해볼 만한 가치가 있는 잡음 제거 방법입니다.
 
 #### 3. Notch Filter
 
 notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 이용하면 원하는 노이즈 패턴을 분석했을 때, 상대적으로 효과적으로 특정 피치의 잡음을 제거할 수 있었습니다(예: 6000Hz + Q인자<잘라낼 노치의 폭> 기준으로  6000Hz 근처의 음역대의 소리를 제거할 수 있음을 확인함). 하지만 어떤 음역대를 잘라야 해당 브금/노이즈를 제거할 수 있을지는 좀더 시도해 보아야 하며, 손이 굉장히 많이 가고, Frequency 기준점을 옮겨가며 같은 파일을 반복적으로 필터링해야 합니다. 위에서 설명한 Low Pass Filtering이 훨씬 효율적입니다.
 
+<br></br>
 
 > 저보다 지상님이 해 놓으신게 더 나을 것 같습니다..
 
@@ -207,9 +226,11 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 ### 4. 톤 분리 : Multispeaker Model 응용 -> 핵심은 Feature extraction!
 
 기본적으로는 화난 톤/일반 톤으로 분리하고, 더 나아가서는 각 톤마다 클러스터링을 통해 감정표현을 할 수 있도록 하는 연구입니다. 펭수나 짱구 같은 캐릭터 연기의 경우 상당히 어려운 점이 있습니다. 톤이나 dB, 피치 등으로 구분하기가 쉽지 않기 때문입니다. 그래서 딥러닝을 이용한 [Feature extraction 방식](http://uclab.khu.ac.kr/resources/publication/DJ_39.pdf
-)을 적용하기로 결정했습니다. 오픈소스 프로젝트는 구하지 못했으나 데이터셋은 구할 수 있어 간단히 구현해 보기로 하였습니다. (데이터셋 : [#1, ravdess](https://zenodo.org/record/1188976#.XjJiU2gzZhE) [#2, savee](https://www.kaggle.com/barelydedicated/savee-database) [#3, emo_DB](http://emodb.bilderbar.info/download/))
+)을 적용하기로 결정했습니다. 오픈소스 프로젝트는 구하지 못했으나 데이터셋은 구할 수 있어 간단히 구현해 보기로 하였습니다. (데이터셋 : [#1, ravdess, 영어](https://zenodo.org/record/1188976#.XjJiU2gzZhE) [#2, savee, 영어](https://www.kaggle.com/barelydedicated/savee-database) [#3, emo_DB, 독일어](http://emodb.bilderbar.info/download/))
 
 + 추가로 참고할 만한 프로젝트 : [Emo_DB](https://github.com/bazaarvoice/emodb)
+
+<br></br>
 
 > 밑바닥부터 시작하는 톤 분리 : 
 
@@ -220,6 +241,8 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 2. 딥러닝 모델을 구축합니다. `sample.py`파일에서는, 가장 기초적인 MLPClassifier모델을 활용했습니다([scikit-learn라이브러리 이용](https://github.com/scikit-learn/scikit-learn)) (MLPClassifier : Multi-layer Perceptron Classifier -> Use LBFGS or stochastic gradient descent as optimizer. -> feedforward ANN model)
 
 3. 데이터셋을 넣고, 훈련을 시킵니다!
+
+<br></br>
 
 > 원리?
 
@@ -235,9 +258,14 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 그 다음으로는 그냥 classification을 딥러닝 모델을 통해 계속 돌리면 됩니다!
 
+<br></br>
+
 > How it works?
 
 
+
+
+<br></br>
 
 > Improvements?
 
@@ -287,6 +315,8 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 별로 성능이 좋지 않아서, 사용하지 않을 예정입니다. 구체적으로는, 다음과 같은 문제가 있습니다.
 
+<br></br>
+
 1. 신뢰도의 문제점
 
 -> 가장 근본적인 문제입니다. Resemblyzer는 먼저 깔끔한 캐릭터의 보이스를 일정 부분 인풋으로 받아서, embedding을 합니다(d-vector, length : 256). 그렇다면 깔끔한 캐릭터의 보이스를 다시 인풋으로 넣어서(간단히 말하자면 트레이닝 데이터로 훈련을 하는 느낌입니다) 지금 화자가 내가 voice를 embedding한 그 화자가 맞는지를 판단하면, 이론적으로는 confident한 수치가 계속 나와야 합니다(voice embedding을 한 화자가 말하고 있음이 확실한 경우를 confident, 애매한 경우를 uncertain이라고 분류하고 있습니다). 그러나 훈련 데이터를 돌려봤음에도 중간 중간 uncertain이 관측이 되며, A화자와 B화자가 순차적으로 대화하는 경우에서도 매우 낮은 성능을 보입니다. 실제로 그런 용도로는 사용할 수 없습니다.
@@ -315,6 +345,11 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 [구글에서 2019년에 발표한 Voice Filter](https://google.github.io/speaker-id/publications/VoiceFilter/)를 복습해 보았습니다. 기본 방식은 Noise와 Voice가 Mixed된 파일에서 Noise를 마스킹하는 것이라면, VoiceFilter는 미리 학습된(임베딩된) 사용자의 d-Vector를 이용해 Mixed된 파일에서 Voice를 추출하는 방식입니다. 구글에서는 상당한 성능 향상을 보인다고 발표했습니다. 다만, 아직 변변한 구현체가 있는지는 잘 모르겠습니다. 찾아본 구현체들 : [#1](https://github.com/mindslab-ai/voicefilter) [#2](https://github.com/edwardyoon/voicefilter) [#3](https://github.com/funcwj/voice-filter)
 
 그 중, [쓸만하다고 생각하는 구현체](https://github.com/mindslab-ai/voicefilter)가 있어 돌려보았습니다.
+
+
+<br></br>
+
+> Bugfix?
 
 위 링크의 README를 따라가시면 됩니다! 다만, **Prepare dataset**부분에서, 4번 항목 *Preprodcess wav files* 의 경우, 아래와 같은 명령어를 입력해 주세요.
 
