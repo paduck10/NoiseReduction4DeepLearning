@@ -245,10 +245,21 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 `sample.py`에서는 ravdess dataset을 활용하여 간단한 테스트를 진행했습니다. `duck_emotion.py`에서는 savee dataset과 emo_DB dataset을 추가한 custom dataset을 이용하여 훈련을 시킵니다. Clustering은 neutral와 anger 두 가지 케이스로 나누어 진행하였습니다.
 
+-> 데이터셋을 늘린다고 해서 Accuracy가 무조건적으로 늘어나는 것은 아닙니다. 아래는 Anger, Neutral, Sadness 세 가지로 clustering 시 정확도 수치입니다.
+
+-> ravdess dataset만 가지고 훈련 : Training 360개, Testing 120개로 훈련 시 정확도 약 75% 
+
+-> ravdess dataset + savee dataset 가지고 훈련 : Training 540개, Testing 180개로 훈련 시 정확도 72~75%
+
 
 2. 딥러닝 모델 개선
 
 `sample.py`에서는 가장 원시적인 딥러닝 모델, 퍼셉트론을 활용했습니다. CNN이나 FC, 등등 classification에 맞는 모델을 잘 적용하면 accuracy를 늘릴 수 있을 것입니다!
+
+
+3. Things to note
+
+클러스터링 갯수를 늘릴수록 정확도가 떨어집니다. Anger, Neutral 두 가지로 clustering 시 정확도 약 85% 내외, Anger, Neutral, Sadness 세 가지로 clustering 시 정확도 약 70~75%
 
 <br></br>
 ---
@@ -289,6 +300,8 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 [구글에서 2019년에 발표한 Voice Filter](https://google.github.io/speaker-id/publications/VoiceFilter/)를 복습해 보았습니다. 기본 방식은 Noise와 Voice가 Mixed된 파일에서 Noise를 마스킹하는 것이라면, VoiceFilter는 미리 학습된(임베딩된) 사용자의 d-Vector를 이용해 Mixed된 파일에서 Voice를 추출하는 방식입니다. 구글에서는 상당한 성능 향상을 보인다고 발표했습니다. 다만, 아직 변변한 구현체가 있는지는 잘 모르겠습니다. 찾아본 구현체들 : [#1](https://github.com/mindslab-ai/voicefilter) [#2](https://github.com/edwardyoon/voicefilter) [#3](https://github.com/funcwj/voice-filter)
 
 그 중, [쓸만하다고 생각하는 구현체](https://github.com/mindslab-ai/voicefilter)가 있어 돌려보았습니다.
+
+
 
 <br></br>
 ---
