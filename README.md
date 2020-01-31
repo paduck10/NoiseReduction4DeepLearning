@@ -204,10 +204,47 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 
 ### 4. 톤 분리 : Multispeaker Model 응용 -> 핵심은 Feature extraction!
 
-기본적으로는 화난 톤/일반 톤으로 분리하고, 더 나아가서는 각 톤마다 클러스터링을 통해 감정표현을 할 수 있도록 하는 연구입니다. 펭수나 짱구 같은 캐릭터 연기의 경우 상당히 어려운 점이 있습니다. 톤이나 dB, 피치 등으로 구분하기가 쉽지 않기 때문입니다. 그래서 딥러닝을 이용한 Feature extraction 방식을 적용하기로 결정했습니다.
+기본적으로는 화난 톤/일반 톤으로 분리하고, 더 나아가서는 각 톤마다 클러스터링을 통해 감정표현을 할 수 있도록 하는 연구입니다. 펭수나 짱구 같은 캐릭터 연기의 경우 상당히 어려운 점이 있습니다. 톤이나 dB, 피치 등으로 구분하기가 쉽지 않기 때문입니다. 그래서 딥러닝을 이용한 [Feature extraction 방식](http://uclab.khu.ac.kr/resources/publication/DJ_39.pdf
+)을 적용하기로 결정했습니다. 오픈소스 프로젝트는 구하지 못했으나 데이터셋은 구할 수 있어 간단히 구현해 보기로 하였습니다. (데이터셋 : [#1, ravdess](https://zenodo.org/record/1188976#.XjJiU2gzZhE) [#2, savee](https://www.kaggle.com/barelydedicated/savee-database) [#3, emo_DB](http://emodb.bilderbar.info/start.html))
+
+> 밑바닥부터 시작하는 톤 분리 : 
+
+먼저, 제일 crude한 모델로 시작합니다. 프로세스는 다음과 같습니다.
+
+1. 먼저, 각 오디오 파일의 Feature를 extract합니다.
+
+2. 딥러닝 모델을 구축합니다. `sample.py`파일에서는, 가장 기초적인 MLPClassifer모델을 활용했습니다([scikit-learn라이브러리 이용](https://github.com/scikit-learn/scikit-learn))
+
+3. 데이터셋을 넣고, 훈련을 시킵니다!
+
+> 원리?
+
+Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 입니다.
+
+1. MFCC :  Mel Frequency Cepstral Coefficient, represents the short-term power spectrum of a sound
+
+2. Chroma : Pertains to the 12 different pitch classes
+
+3. Mel : Mel Spectrogram Frequency
+
+이 3가지 스텝을 밟으면 간단히 vector 포맷으로 오디오 파일을 변환할 수 있습니다. Feature extraction을 위한 함수는 librosa library에서 제공해주고 있으므로, 간단하게 구현할 수 있습니다.
+
+그 다음으로는 그냥 classification을 딥러닝 모델을 통해 계속 돌리면 됩니다!
+
+> How it works?
 
 
 
+> Improvements?
+
+1. 데이터 셋 늘리기
+
+`sample.py`에서는 ravdess dataset
+
+
+2. 딥러닝 모델 개선
+
+`sample.py`에서는 가장 원시적인 딥러닝 모델, 퍼셉트론을 활용했습니다. CNN이나 FC, 등등 classification에 맞는 모델을 잘 적용하면 accuracy를 늘릴 수 있을 것입니다!
 
 <br></br>
 ---
@@ -243,11 +280,11 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 -> 실험 및 테스트 : `conda activate resemblyzer` -> /home/deokgyu.ahn/practice/Resource/Code/speaker_separation/Resemblyzer/ 폴더에서 테스트
 
 
-##### Voice Filter : Google, save us
+#### Voice Filter : Google, save us
 
 [구글에서 2019년에 발표한 Voice Filter](https://google.github.io/speaker-id/publications/VoiceFilter/)를 복습해 보았습니다. 기본 방식은 Noise와 Voice가 Mixed된 파일에서 Noise를 마스킹하는 것이라면, VoiceFilter는 미리 학습된(임베딩된) 사용자의 d-Vector를 이용해 Mixed된 파일에서 Voice를 추출하는 방식입니다. 구글에서는 상당한 성능 향상을 보인다고 발표했습니다. 다만, 아직 변변한 구현체가 있는지는 잘 모르겠습니다. 찾아본 구현체들 : [#1](https://github.com/mindslab-ai/voicefilter) [#2](https://github.com/edwardyoon/voicefilter) [#3](https://github.com/funcwj/voice-filter)
 
-그 중, 쓸만하다고 생각하는 구현체가 있어 돌려보았습니다.
+그 중, [쓸만하다고 생각하는 구현체](https://github.com/mindslab-ai/voicefilter)가 있어 돌려보았습니다.
 
 <br></br>
 ---
