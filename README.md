@@ -249,7 +249,7 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 -> ravdess dataset만 가지고 훈련 : Training 360개, Testing 120개로 훈련 시 정확도 약 75% 
 
--> ravdess dataset + savee dataset 가지고 훈련 : Training 540개, Testing 180개로 훈련 시 정확도 72~75%
+-> ravdess dataset + savee dataset 가지고 훈련 : Training 540개, Testing 180개로 훈련 시 정확도 72\~75%
 
 
 2. 딥러닝 모델 개선
@@ -263,13 +263,13 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 
  - Anger, Neutral 두 가지로 clustering 시
-    : ravdess + savee dataset -> Training set 351개, Testing set 117개, Accuracy 93~96%
-    : ravdess dataset -> Training set 216개, Testing set 72개, Accuracy 70~75%
+    : ravdess + savee dataset -> Training set 351개, Testing set 117개, Accuracy 93\~96%
+    : ravdess dataset -> Training set 216개, Testing set 72개, Accuracy 70\~75%
    
   
  - Anger, Nuetral, Sadness 세 가지로 clustering 시
     : ravdess + savee dataset -> Training set 351개, Testing set 117개, Accuracy 94%
-    : ravdess dataset -> Training set 216개, Testing set 72개, Accuracy 72~87.5% (unstable, due to primal perceptron model)
+    : ravdess dataset -> Training set 216개, Testing set 72개, Accuracy 72\~87.5% (unstable, due to primal perceptron model)
 
 
 <br></br>
