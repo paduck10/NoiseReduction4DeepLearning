@@ -351,11 +351,13 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 > Bugfix?
 
+
 위 링크의 README를 따라가시면 됩니다! 다만, **Prepare dataset**부분에서, 4번 항목 *Preprodcess wav files* 의 경우, 아래와 같은 명령어를 입력해 주세요.
 
 ```
 python generator.py -c ./config/config.yaml -d /home/deokgyu.ahn/practice/Resource/Code/speaker_separation/voicefilter/datasets/LibriSpeech -o /home/deokgyu.ahn/practice/Resource/Code/speaker_separation/voicefilter/datasets/normalized_dataset/ -p 16 >out.log &
 ```
+이때, dev-clean 파일을 다운받지 않으면 test set 생성 과정에서 오류가 발생합니다. `wget http://www.openslr.org/resources/12/dev-clean.tar.gz` 필수! 이후 `tar -xvzf dev-clean.tar.gz`를 하면 자동으로 LibriSpeech 디렉토리 내부에 저장이 됩니다.
 
 (`-o` 부분을 생략하면 `random.sample`에서 ValueError가 뜹니다. Librispeech 폴더의 디렉토리를 넣어 주시면 됩니다.)
 
