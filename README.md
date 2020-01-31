@@ -207,6 +207,8 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 기본적으로는 화난 톤/일반 톤으로 분리하고, 더 나아가서는 각 톤마다 클러스터링을 통해 감정표현을 할 수 있도록 하는 연구입니다. 펭수나 짱구 같은 캐릭터 연기의 경우 상당히 어려운 점이 있습니다. 톤이나 dB, 피치 등으로 구분하기가 쉽지 않기 때문입니다. 그래서 딥러닝을 이용한 [Feature extraction 방식](http://uclab.khu.ac.kr/resources/publication/DJ_39.pdf
 )을 적용하기로 결정했습니다. 오픈소스 프로젝트는 구하지 못했으나 데이터셋은 구할 수 있어 간단히 구현해 보기로 하였습니다. (데이터셋 : [#1, ravdess](https://zenodo.org/record/1188976#.XjJiU2gzZhE) [#2, savee](https://www.kaggle.com/barelydedicated/savee-database) [#3, emo_DB](http://emodb.bilderbar.info/start.html))
 
++ 추가로 참고할 만한 프로젝트 : [Emo_DB](https://github.com/bazaarvoice/emodb)
+
 > 밑바닥부터 시작하는 톤 분리 : 
 
 먼저, 제일 crude한 모델로 시작합니다. 프로세스는 다음과 같습니다.
