@@ -292,16 +292,21 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 - Anger, Neutral 두 가지로 clustering 시
 
-: ravdess + savee dataset -> Training set 351개, Testing set 117개, Accuracy 93\~96%
+: ravdess + savee + emoDB -> Training set 481개, Testing set 161개, Accuracy 95\~96%
 
-: ravdess dataset -> Training set 216개, Testing set 72개, Accuracy 70\~75%
+: ravdess + savee -> Training set 351개, Testing set 117개, Accuracy 93\~96%
+
+: ravdess -> Training set 216개, Testing set 72개, Accuracy 70\~75%
+
    
   
 - Anger, Nuetral, Sadness 세 가지로 clustering 시
 
-: ravdess + savee dataset -> Training set 351개, Testing set 117개, Accuracy 94%
+: ravdess + savee + emoDB -> Training set 481개, Testing set 161개, Accuracy 95\~96%
 
-: ravdess dataset -> Training set 216개, Testing set 72개, Accuracy 72\~87.5% (unstable, due to primal perceptron model)
+: ravdess + savee -> Training set 351개, Testing set 117개, Accuracy 94%
+
+: ravdess -> Training set 216개, Testing set 72개, Accuracy 72\~87.5% (unstable, due to primal perceptron model)
 
 
 <br></br>
