@@ -173,7 +173,8 @@ parser.add_argument('-g', '--detect_gender', choices = ['true', 'false'], defaul
 3-2. `csv_to_sliced.py` 인자 설명 :
 
 - slice 최소 시간 : `-m`, csv 파일에서 준 label에서, 잘라서 저장할 파일의 최소 시간을 조정할 수 있습니다. 기본값은 1.5초입니다.
-```parser.add_argument('-m', '--minsec', default="1.5", help='Minial second in terms of slicing the speech, used for training. It is float type value, but you can just type integer, e.g. "-m 1"', type=float, required=False)
+```
+parser.add_argument('-m', '--minsec', default="1.5", help='Minial second in terms of slicing the speech, used for training. It is float type value, but you can just type integer, e.g. "-m 1"', type=float, required=False)
 ```
 
 - 자를 mp3 파일들 : `-i`, 자를 mp3 vocal 파일들이 들어 있는 디렉토리를 인풋으로 넣어줍니다.
