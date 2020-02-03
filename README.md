@@ -287,7 +287,7 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 3. Things to note
 
-클러스터링 갯수를 늘릴수록 정확도가 떨어집니다.
+클러스터링 갯수를 늘릴수록 정확도가 떨어집니다. + emoDB 데이터셋은 독일어라 억양의 차이가 존재해서 그런지, 추가했더니 오히려 정확도가 떨어지는 것 같습니다.
 
 
 - Anger, Neutral 두 가지로 clustering 시
@@ -296,15 +296,15 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 : ravdess + savee -> Training set 351개, Testing set 117개, Accuracy 93\~96%
 
-: ravdess -> Training set 216개, Testing set 72개, Accuracy 70\~75%
+: ravdess -> Training set 216개, Testing set 72개, Accuracy 70\~89% (unstable, due to primal perceptron model)
 
    
   
 - Anger, Nuetral, Sadness 세 가지로 clustering 시
 
-: ravdess + savee + emoDB -> Training set 481개, Testing set 161개, Accuracy 95\~96%
+: ravdess + savee + emoDB -> Training set 714개, Testing set 238개, Accuracy 75\~80%
 
-: ravdess + savee -> Training set 351개, Testing set 117개, Accuracy 94%
+: ravdess + savee -> Training set 540개, Testing set 180개, Accuracy 65\~75%
 
 : ravdess -> Training set 216개, Testing set 72개, Accuracy 72\~87.5% (unstable, due to primal perceptron model)
 
@@ -356,17 +356,29 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 > Bugfix?
 
-
 위 링크의 README를 따라가시면 됩니다! 다만, **Prepare dataset**부분에서, 4번 항목 *Preprodcess wav files* 의 경우, 아래와 같은 명령어를 입력해 주세요.
 
 ```
 python generator.py -c ./config/config.yaml -d /home/deokgyu.ahn/practice/Resource/Code/speaker_separation/voicefilter/datasets/LibriSpeech -o /home/deokgyu.ahn/practice/Resource/Code/speaker_separation/voicefilter/datasets/normalized_dataset/ -p 16 >out.log &
 ```
-이때, dev-clean 파일을 다운받지 않으면 test set 생성 과정에서 오류가 발생합니다. `wget http://www.openslr.org/resources/12/dev-clean.tar.gz` 필수! 이후 `tar -xvzf dev-clean.tar.gz`를 하면 자동으로 LibriSpeech 디렉토리 내부에 저장이 됩니다.
+이때, dev-clean 파일을 다운받지 않으면 test set 생성 과정에서 오류가 발생합니다. `wget http://www.openslr.org/resources/12/dev-clean.tar.gz` 필수! 이후 `tar -xvzf dev-clean.tar.gz`를 하면 자동으로 LibriSpeech 디렉토리 내부에 저장이 됩니다. -> 이거 해도 오류 발생할 경우, train 데이터셋에서 1000개정도 test 데이터셋으로 옮겨주면 됩니다. (실제로 그렇게 돌려봄)
 
 (`-o` 부분을 생략하면 `random.sample`에서 ValueError가 뜹니다. Librispeech 폴더의 디렉토리를 넣어 주시면 됩니다.)
 
 (`-p`의 경우, cpu 갯수를 써 주시면 됩니다. `python; import multiprocessor as mp; mp.cpu_count()`로 갯수 확인.)
+
+(./config/config.yaml 파일에서 batch size를 2로 낮춰야 약 10GB정도의 메모리를 잡아 먹으면서 겨우 돌아갑니다. - GTX2080Ti 기준)
+
+(CUDA Runtime Execution Error 가 발생 -> `torch.backends.cudnn.enabled = False`를 넣어 해결)
+
+(기타 모든 버그들 해결 완료된 상태입니다)
+
+
+> How it work?
+
+
+
+> 현재 진행 상황 :
 
 
 
