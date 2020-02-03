@@ -273,22 +273,9 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 `sample.py`에서는 ravdess dataset을 활용하여 간단한 테스트를 진행했습니다. `duck_emotion.py`에서는 savee dataset과 emo_DB dataset을 추가한 custom dataset을 이용하여 훈련을 시킵니다. Clustering은 neutral와 anger 두 가지 케이스로 나누어 진행하였습니다.
 
--> 데이터셋을 늘린다고 해서 Accuracy가 무조건적으로 늘어나는 것은 아닙니다. 아래는 Anger, Neutral, Sadness 세 가지로 clustering 시 정확도 수치입니다.
+-> 데이터셋을 늘린다고 해서 Accuracy가 무조건적으로 늘어나는 것은 아닙니다. 아래에 Anger, Neutral, Sadness 세 가지로 clustering 시 정확도 수치를 데이터셋 별로 정리해 놓았습니다.
 
--> ravdess dataset만 가지고 훈련 : Training 360개, Testing 120개로 훈련 시 정확도 약 75% 
-
--> ravdess dataset + savee dataset 가지고 훈련 : Training 540개, Testing 180개로 훈련 시 정확도 72\~75%
-
-
-2. 딥러닝 모델 개선
-
-`sample.py`에서는 가장 원시적인 딥러닝 모델, 퍼셉트론을 활용했습니다. CNN이나 FC, 등등 classification에 맞는 모델을 잘 적용하면 accuracy를 늘릴 수 있을 것입니다!
-
-
-3. Things to note
-
-클러스터링 갯수를 늘릴수록 정확도가 떨어집니다. + emoDB 데이터셋은 독일어라 억양의 차이가 존재해서 그런지, 추가했더니 오히려 정확도가 떨어지는 것 같습니다.
-
+<br></br>
 
 - Anger, Neutral 두 가지로 clustering 시
 
@@ -297,8 +284,6 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 : ravdess + savee -> Training set 351개, Testing set 117개, Accuracy 93\~96%
 
 : ravdess -> Training set 216개, Testing set 72개, Accuracy 70\~89% (unstable, due to primal perceptron model)
-
-   
   
 - Anger, Nuetral, Sadness 세 가지로 clustering 시
 
@@ -307,6 +292,21 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 : ravdess + savee -> Training set 540개, Testing set 180개, Accuracy 65\~75%
 
 : ravdess -> Training set 216개, Testing set 72개, Accuracy 72\~87.5% (unstable, due to primal perceptron model)
+
+2. 딥러닝 모델 개선
+
+`sample.py`에서는 가장 원시적인 딥러닝 모델, 퍼셉트론을 활용했습니다. CNN 등 classification에 맞는 모델을 잘 적용하면 accuracy를 늘릴 수 있을 것입니다!
+
+-> Tensorflow 모듈로 간단한 CNN 모델은 만들어 볼 수 있을 것 같습니다.
+
+
+3. Things to note
+
+-> 먼저, 딥러닝 모델을 개선함으로써 classification이 잘 작동하도록 만듭니다.
+
+-> 그후, Anger, Neutral 수치가 있다고 하면 수치가 매우 높은 녀석들을 다시 Training set으로 포함 시켜 학습을 시킵니다.(되먹임 회로 같은 원리)
+
+-> 그런 식으로 데이터셋을 확장성 있게 늘려 나갈 수 있습니다!
 
 
 <br></br>
