@@ -18,9 +18,13 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 - Requirements(python modules) : 
 
 pip        19.2.3
+
 pyperclip  1.7.0
+
 selenium   3.141.0
+
 setuptools 41.2.0
+
 urllib3    1.25.7
 
 <br></br>
