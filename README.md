@@ -15,6 +15,14 @@ NoiseReduction4DeepLearning - It automates the speech segment and noise reductio
 
 펭수 영상(90개), 양희은 라디오 음성(1000)개 크롤링. 파이썬 셀레니엄, 웹브라우저 모듈을 이용했습니다.
 
+- Requirements(python modules) : 
+
+pip        19.2.3
+pyperclip  1.7.0
+selenium   3.141.0
+setuptools 41.2.0
+urllib3    1.25.7
+
 <br></br>
 
 > Get it work!
