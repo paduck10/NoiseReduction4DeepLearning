@@ -27,6 +27,9 @@ setuptools 41.2.0
 
 urllib3    1.25.7
 
+*주의* : Window 환경(로컬)에서 pip 모듈을 다운 받으려면 프록시 설정을 수정해주어야 합니다! ESCORD PC-DOWNLOAD -> \[ 인터넷 보안 - 서울대연구소 / 프록시 (Proxy) \] - 프록시 설정 및 인증서 설치 가이드 -> 52페이지 
+ 
+
 <br></br>
 
 > Get it work!
