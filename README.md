@@ -43,6 +43,8 @@ urllib3    1.25.7
 
 -> `pengsu_youtube.txt`파일에 저장된 각 유투브 링크는 콤마(,)로, 혹은 `\r\n`으로 구별되어야 함!
 
+-> 크롬 브라우저가 열릴 때, 10초 안에 `1회성 사용`버튼을 눌러주세요.
+
 <br></br>
 
 **양희은 유투브 라디오 파일 다운 : `python ppang_radio_down.py` 실행**
@@ -100,15 +102,35 @@ parser.add_argument('-o', '--output_dir', default = '/home/deokgyu.ahn/practice/
 parser.add_argument('-c', '--codec', default = 'mp3', help='Choose which codec to use : mp3    , wav, ogg, m4a, wma, flac')
 ```
 
+- 예시 :
+
+```
+python separate_pengsu.py -i [mp3파일들이 위치한 디렉토리] -o [음악/보컬 파일들이 저장될 디렉토리] -c ['mp3', 'wav', 'm4a', 'ogg', 'wma', 'flac' 중 택1. 기본은 mp3코덱]
+```
+
+이때, mp3 파일 명에 공백(space)가 있을 경우, 에러가 납니다. 그래서 아래에 적어 놓은 `indexing.py`를 활용하여 1.mp3, 2.mp3 형식으로 바꾸어 주는 것이 안전합니다. 파일의 확장자는 .mp3 파일이어야 작업이 가능하게 만들어 놓았습니다. (다른 포맷도 받을 수 있게 코드 수정 가능함. 혹은 pydub으로 파일 확장자 mp3로 바꾸어주는 방법도...)
+
 `separate_pengsu.py`파일을 실행시키면(argparse 인자 줘서), 각 파일별로 음악과 보컬이 분리가 됩니다(예 : 파일 명이 1.mp3이면 '1'이라는 폴더에, accompaniment.mp3(음악 파일)과 vocal.mp3(보컬 파일)이 생성되게 됩니다).
 
 ![image](https://user-images.githubusercontent.com/26838115/73428903-a4053880-437d-11ea-845c-265f7678d366.png)
 
 
-*참고* : /home/deokgyu.ahn/practice/Resource/Code/voice_separation/spleeter/ 폴더에 `mv_pengsu_vocal_files.py` 스크립트를 실행시키면, `-i` 인자에 위에서 작업한 vocal.mp3, accompaniment.mp3 파일들이 각 폴더별로 들어가 있는 상위 디렉토리를 넣으면, `-o` 인자에 넣은 디렉토리로 vocal.mp3 파일만 가져와서 이동시켜 줍니다(파일명 변경 자동).
+- *참고* : /home/deokgyu.ahn/practice/Resource/Code/voice_separation/spleeter/ 폴더에 `mv_pengsu_vocal_files.py` 스크립트를 실행시키면, `-i` 인자에 위에서 작업한 vocal.mp3, accompaniment.mp3 파일들이 각 폴더별로 들어가 있는 상위 디렉토리를 넣으면, `-o` 인자에 넣은 디렉토리로 vocal.mp3 파일만 가져와서 이동시켜 줍니다(파일명 변경 자동).
+
+**예시** :
+
+```
+python mv_pengsu_vocal_files.py -i [1, 2, 3... 폴더들이 위치한 디렉토리] -o [1, 2, 3... 폴더들에 담긴 vocal.mp3 파일들을 인덱싱해서 한꺼번에 모아 놓고 싶은 디렉토리]
+```
 
 
-*참고* : .mp3 파일 이름을 간편하게 인덱싱하는 스크립트(1.mp3, 2.mp3... 등으로) : /home/deokgyu.ahn/practice/Resource/Code/voice_separation/spleeter/ 폴더에 `indexing.py`파일에 `-i`인자를 주면 해당 디렉토리 내의 .mp3 파일 이름들을 1.mp3, 2.mp3 ... 식으로 바꾸어 줍니다.
+- *참고* : .mp3 파일 이름을 간편하게 인덱싱하는 스크립트(1.mp3, 2.mp3... 등으로) : /home/deokgyu.ahn/practice/Resource/Code/voice_separation/spleeter/ 폴더에 `indexing.py`파일에 `-i`인자를 주면 해당 디렉토리 내의 .mp3 파일 이름들을 1.mp3, 2.mp3 ... 식으로 바꾸어 줍니다.
+
+**예시** :
+
+```
+python indexing.py -i [유투브 영상들이 있는 디렉토리]
+```
 
 
 <br></br>
@@ -155,7 +177,7 @@ parser.add_argument('-i', '--input', nargs='+', help='Input media to analyse. Ma
  ```
  
  - 아웃풋 디렉토리 : `-o`, 분석을 완료한 csv 파일들이 저장될 위치입니다.
- ```
+```
 parser.add_argument('-o', '--output_directory', default='/home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/media/out', help='Directory used to store segmentations. Resulting segmentations have same base name as the corresponding input media, with csv extension. Ex: mymedia.MPG will result in mymedia.csv', required=False)
 ```
 
@@ -168,6 +190,13 @@ parser.add_argument('-d', '--vad_engine', choices=['sm', 'smn'], default='smn', 
 ```
 parser.add_argument('-g', '--detect_gender', choices = ['true', 'false'], default='True', help="(default: 'true'). If set to 'true', segments detected as speech will be splitted into 'male' and 'female' segments. If set to 'false', segments corresponding to speech will be labelled as 'speech' (faster)")
 ```
+
+- **예시** :
+
+```
+python ina_speech_segmenter.py -r [자르고 싶은 파일들이 위치한 디렉토리] -o [각 mp3 파일들의 레이블 분류 csv 데이터 파일들이 저장될 위치]
+```
+(엔진과 성별 체크는 생략해도 됩니다)
 
 3. 위에서 생성한 csv 파일을 바탕으로, 실제 음성 파일을 잘라보겠습니다. /home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/scripts/ 폴더에 `csv_to_sliced.py`라는 파일을 이용하면, 다음과 같이 파일들을 잘라낼 수 있습니다.
 
