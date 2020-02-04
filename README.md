@@ -307,6 +307,15 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 > How it works?
 
+1. 먼저, 환경 설정을 바꾸어 줍니다 `conda activate emotion`
+
+2. /home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/ 폴더로 이동하여, `duck_emotion.py` 파일을 실행시킵니다.
+
+- 예시 :
+
+-> `python duck_emotion.py` : MLP 모델 학습, Accuracy 약 97% (하이퍼 파라미터 조정을 통해 최적화 가능)
+
+-> `python duck_emotion.py` : RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능)
 
 
 
@@ -324,7 +333,7 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 - Anger, Neutral 두 가지로 clustering 시
 
-**: ravdess + savee + emoDB -> Training set 481개, Testing set 161개, Accuracy 95\~96%**
+**: ravdess + savee + emoDB -> Training set 481개, Testing set 161개, Accuracy 95\~97%**
 
 : ravdess + savee -> Training set 351개, Testing set 117개, Accuracy 93\~96%
 
