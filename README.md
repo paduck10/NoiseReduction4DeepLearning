@@ -287,6 +287,8 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 
 3. 데이터셋을 넣고, 훈련을 시킵니다!
 
+-> 각 데이터셋의 경우, ravdess에서 요구하는 파일 형식을 맞추어 주었습니다. 예) sth-sth-emotion-sth-sth-sth-sth의 형식인데, 다른 데이터셋도 `emotion`부분에 잘 맞도록 align을 해 주었습니다. (`savee_to_ravdess.py`, `emoDB_to_ravdess.py`, `tess_to_ravdess.py`가 그 역할을 함)
+
 <br></br>
 
 > 원리?
