@@ -196,6 +196,7 @@ parser.add_argument('-g', '--detect_gender', choices = ['true', 'false'], defaul
 ```
 python ina_speech_segmenter.py -r [자르고 싶은 파일들이 위치한 디렉토리] -o [각 mp3 파일들의 레이블 분류 csv 데이터 파일들이 저장될 위치]
 ```
+
 (엔진과 성별 체크는 생략해도 됩니다)
 
 3. 위에서 생성한 csv 파일을 바탕으로, 실제 음성 파일을 잘라보겠습니다. /home/deokgyu.ahn/practice/Resource/Code/speechseg/inaSpeechSegmenter/scripts/ 폴더에 `csv_to_sliced.py`라는 파일을 이용하면, 다음과 같이 파일들을 잘라낼 수 있습니다.
@@ -270,10 +271,9 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 
 ### 4. 톤 분리 : Multispeaker Model 응용 -> 핵심은 Feature extraction!
 
-기본적으로는 화난 톤/일반 톤으로 분리하고, 더 나아가서는 각 톤마다 클러스터링을 통해 감정표현을 할 수 있도록 하는 연구입니다. 펭수나 짱구 같은 캐릭터 연기의 경우 상당히 어려운 점이 있습니다. 톤이나 dB, 피치 등으로 구분하기가 쉽지 않기 때문입니다. 그래서 딥러닝을 이용한 [Feature extraction 방식](http://uclab.khu.ac.kr/resources/publication/DJ_39.pdf
-)을 적용하기로 결정했습니다. 오픈소스 프로젝트는 구하지 못했으나 데이터셋은 구할 수 있어 간단히 구현해 보기로 하였습니다. (데이터셋 : [#1, ravdess, 영어](https://zenodo.org/record/1188976#.XjJiU2gzZhE) [#2, savee, 영어](https://www.kaggle.com/barelydedicated/savee-database) [#3, emo_DB, 독일어](http://emodb.bilderbar.info/download/))
+기본적으로는 화난 톤/일반 톤으로 분리하고, 더 나아가서는 각 톤마다 클러스터링을 통해 감정표현을 할 수 있도록 하는 연구입니다. 펭수나 짱구 같은 캐릭터 연기의 경우 상당히 어려운 점이 있습니다. 톤이나 dB, 피치 등으로 구분하기가 쉽지 않기 때문입니다. 그래서 딥러닝을 이용한 [Feature extraction 방식](https://www.intechopen.com/books/from-natural-to-artificial-intelligence-algorithms-and-applications/some-commonly-used-speech-feature-extraction-algorithms)을 적용하기로 결정했습니다. 오픈소스 프로젝트는 구하지 못했으나 데이터셋은 구할 수 있어 간단히 구현해 보기로 하였습니다. (데이터셋 : [#1, ravdess, 영어](https://zenodo.org/record/1188976#.XjJiU2gzZhE) [#2, savee, 영어](https://www.kaggle.com/barelydedicated/savee-database) [#3, emo_DB, 독일어](http://emodb.bilderbar.info/download/) [#4, TESS, 영어](https://www.kaggle.com/ejlok1/toronto-emotional-speech-set-tess))
 
-+ 추가로 참고할 만한 프로젝트 : [Emo_DB](https://github.com/bazaarvoice/emodb)
++ 시간이 허락되었다면 구현하고 싶었던 것 : [Automatic Speech Emotion Recognition Using Machine Learning](https://www.intechopen.com/online-first/automatic-speech-emotion-recognition-using-machine-learning)
 
 <br></br>
 
@@ -291,9 +291,15 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 
 > 원리?
 
-Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 입니다.
+Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해당 모델에서는 MFCC를 사용했습니다. 알아야 할 개념은 크게 3가지 입니다.
 
 1. MFCC :  Mel Frequency Cepstral Coefficient, represents the short-term power spectrum of a sound
+
+-> MFCC는 사람의 청각 시스템을 모사합니다. 낮은 주파수 영역대는 Linear하게, 높은 주파수 영역대는 Logarithmic하게 처리해서, 대략 Mel Frequency 기준 1000Hz이하인 녀석들은 민감하게, 그 위의 녀석들은 덜 민감하게 받아들입니다.
+
+-> 각자의 Feature extraction 방식마다 장단점이 있는데, MFCC는 노이즈에 예민합니다. 대신 노이즈가 거의 없는 환경일 경우 높은 성능을 보여줍니다.
+
+![image](https://user-images.githubusercontent.com/26838115/73889819-d9e17a00-48b3-11ea-82c6-e42edb63de52.png)
 
 2. Chroma : Pertains to the 12 different pitch classes
 
@@ -302,6 +308,10 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 이 3가지 스텝을 밟으면 간단히 vector 포맷으로 오디오 파일을 변환할 수 있습니다. Feature extraction을 위한 함수는 librosa library에서 제공해주고 있으므로, 간단하게 구현할 수 있습니다.
 
 그 다음으로는 그냥 classification을 딥러닝 모델을 통해 계속 돌리면 됩니다!
+
+-> 참고 : 다른 Feature extraction 방식들의 장/단점 도표 정리
+
+![image](https://user-images.githubusercontent.com/26838115/73889930-1e6d1580-48b4-11ea-8388-a3a6e1ea7cb0.png)
 
 <br></br>
 
@@ -313,9 +323,11 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 - 예시 :
 
--> `python duck_emotion.py` : MLP 모델 학습, Accuracy 약 97% (하이퍼 파라미터 조정을 통해 최적화 가능)
+-> `python duck_emotion.py` : MLP 모델 학습, Accuracy 약 97% (하이퍼 파라미터 조정을 통해 최적화 가능, 하지만 굳이 안 바꾸셔도...)
 
--> `python duck_emotion.py` : RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능)
+-> 위 명령어를 실행시키면, 
+
+-> `python duck_emotion.py -k True` : RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능)
 
 
 
@@ -353,7 +365,9 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 `sample.py`에서는 가장 원시적인 딥러닝 모델, 퍼셉트론을 활용했습니다. CNN 등 classification에 맞는 모델을 잘 적용하면 accuracy를 늘릴 수 있을 것입니다!
 
--> Tensorflow 모듈로 간단한 CNN 모델은 만들어 볼 수 있을 것 같습니다.
+-> ~Tensorflow 모듈로 간단한 CNN 모델은 만들어 볼 수 있을 것 같습니다.~ : 실험 결과 성능이 더 떨어짐
+
+-> MLPClassifier에서, hidden_layer_sizes를 늘리면 정확도가 향상되는 것을 확인했습니다. 다만 이것도 한계가 있어서, 500000개 정도를 Maximum으로 정해 놓고 돌렸습니다.
 
 
 3. Things to note
@@ -412,12 +426,13 @@ Feature extraction은 간단합니다. 알아야 할 개념은 크게 3가지 �
 
 > Bugfix?
 
-위 링크의 README를 따라가시면 됩니다! 다만, **Prepare dataset**부분에서, 4번 항목 *Preprodcess wav files* 의 경우, 아래와 같은 명령어를 입력해 주세요.
+[위 링크](https://github.com/mindslab-ai/voicefilter)의 README를 따라가시면 됩니다! 다만, **Prepare dataset**부분에서, 4번 항목 *Preprodcess wav files* 의 경우, 아래와 같은 명령어를 입력해 주세요.
 
 ```
 python generator.py -c ./config/config.yaml -d /home/deokgyu.ahn/practice/Resource/Code/speaker_separation/voicefilter/datasets/LibriSpeech -o /home/deokgyu.ahn/practice/Resource/Code/speaker_separation/voicefilter/datasets/normalized_dataset/ -p 16 >out.log &
 ```
-이때, dev-clean 파일을 다운받지 않으면 test set 생성 과정에서 오류가 발생합니다. `wget http://www.openslr.org/resources/12/dev-clean.tar.gz` 필수! 이후 `tar -xvzf dev-clean.tar.gz`를 하면 자동으로 LibriSpeech 디렉토리 내부에 저장이 됩니다. -> 이거 해도 오류 발생할 경우, train 데이터셋에서 1000개정도 test 데이터셋으로 옮겨주면 됩니다. (실제로 그렇게 돌려봄)
+
+이때, dev-clean 파일을 다운받지 않으면 test set 생성 과정에서 오류가 발생합니다. `wget http://www.openslr.org/resources/12/dev-clean.tar.gz` 필수! 이후 `tar -xvzf dev-clean.tar.gz`를 하면 자동으로 LibriSpeech 디렉토리 내부에 저장이 됩니다. -> 이거 해도 오류 발생할 경우, train 데이터셋에서 1000개정도 test 데이터셋으로 옮겨주면 됩니다. (현재 그렇게 돌려봄)
 
 (`-o` 부분을 생략하면 `random.sample`에서 ValueError가 뜹니다. Librispeech 폴더의 디렉토리를 넣어 주시면 됩니다.)
 
@@ -432,9 +447,24 @@ python generator.py -c ./config/config.yaml -d /home/deokgyu.ahn/practice/Resour
 
 > How it work?
 
+-> 테스트만 해보시길 원하신다면, 아래와 같은 형식으로 실행시키면 됩니다.
+
+```
+python inference.py -c [config yaml] -e [path of embedder pt file] --checkpoint_path [path of chkpt pt file] -m [path of mixed wav file] -r [path of reference wav file] -o [output directory]
+```
+
+-> 예시 : 
+
+```
+python inference.py -c ./config/config.yaml -e embedder.pt --checkpoint_path chkpt/first/chkpt_99000.pt -m test_jieun/jieun_duck_mixed.wav -r test_jieun/jieun_clean_merged.wav -o test_jieun/out_test/
+```
 
 
-> 현재 진행 상황 :
+> 현재 진행 상황 : 
+
+-> 화자의 목소리가 Mixed 된 경우는 성능이 그리 좋지 못합니다. (test_jieun 폴더에서 jieun_duck_mixed.wav파일과 out_test/out_jieun_duck_mixed.wav파일 비교)
+
+-> 화자 2명이 번갈아 가면서 말하는 경우는 생각보다 준수한 성능을 보입니다. (test_jieun 폴더에서 jieun_duck_alternate.wav파일과 out_test/out_jieun_duck_alternate.wav파일 비교)
 
 
 
