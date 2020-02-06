@@ -69,7 +69,9 @@ urllib3    1.25.7
 
 배경음악 제거 작업은 [**spleeter** 라이브러리](https://github.com/deezer/spleeter) 이용(RNN Based).
 
-테스트용으로, spleeter에서 제공하는 `pretrained_model`을 사용할 수 있고, 스크립트 작성은 매우 간단합니다. 다만 `pretrained_model`을 불러올때 SSL에러가 뜨는 경우가 있어 직접 `wget`으로 `pretrained_model`을 받아오는 게 더 편할 수 있습니다.
+해당 프로젝트는 Vocals / drums / bass / piano / other separation로 분리된 음성 파일을 학습시켜서 보컬만 분리할 수 있는 RNN모델을 학습시켰습니다.
+
+테스트용으로, spleeter에서 제공하는 `pretrained_model`을 사용할 수 있고, 스크립트 작성은 매우 간단합니다(파일은 하단 참조). 다만 `pretrained_model`을 불러올때 SSL에러가 뜨는 경우가 있어 직접 `wget`으로 `pretrained_model`을 받아오는 게 더 편할 수 있습니다.
 
 성능향상을 위해 [MusDB](https://sigsep.github.io/datasets/musdb.html)를 이용해 학습을 추가적으로 시킬 수도 있습니다.
 
@@ -144,7 +146,7 @@ python indexing.py -i [유투브 영상들이 있는 디렉토리]
 
 ### 2. inaSpeechSegmenter : 스피치(남/여), 뮤직, 사일런스 분리
 
-[**inaSpeechSegmenter**](https://github.com/ina-foss/inaSpeechSegmenter)는 SMN(Speech, Music, NoEnergy)로 음성 파일을 분리해낼 수 있습니다(CNN based). 이때, Speech는 다시 Male, Female화자로 구분해낼 수 있습니다.
+[**inaSpeechSegmenter**](https://github.com/ina-foss/inaSpeechSegmenter)는 SMN(Speech, Music, NoEnergy)로 음성 파일을 분리해낼 수 있습니다(CNN based). 이때, Speech는 다시 Male, Female화자로 구분해낼 수 있습니다. 원리는 앞서 언급한 spleeter와 매우 비슷합니다(데이터셋이 모델의 성능을 좌우).
 
 inaSpeechSegmenter를 이용하면, 각 항목(Speech, Music, NoEnergy)들의 start, end time 값을 csv 파일로 저장할 수 있습니다. 위와 마찬가지로 간단한 코드 수정 및 스크립트 작성으로 각 파일별로 사람의 음성만 뽑아낼 수 있습니다. 일단 그냥 아무 영상만 넣으면 알아서 파일명을 인덱싱 한 다음, 다시 항목별(Male, Female, Music, NoEnergy)로 슬라이스 한 결과를 저장할 수 있는 스크립트를 만들어 놓았습니다.
 
@@ -271,7 +273,9 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 
 ### 4. 톤 분리 : Multispeaker Model 응용 -> 핵심은 Feature extraction!
 
-기본적으로는 화난 톤/일반 톤으로 분리하고, 더 나아가서는 각 톤마다 클러스터링을 통해 감정표현을 할 수 있도록 하는 연구입니다. 펭수나 짱구 같은 캐릭터 연기의 경우 상당히 어려운 점이 있습니다. 톤이나 dB, 피치 등으로 구분하기가 쉽지 않기 때문입니다. 그래서 딥러닝을 이용한 [Feature extraction 방식](https://www.intechopen.com/books/from-natural-to-artificial-intelligence-algorithms-and-applications/some-commonly-used-speech-feature-extraction-algorithms)을 적용하기로 결정했습니다. 오픈소스 프로젝트는 구하지 못했으나 데이터셋은 구할 수 있어 간단히 구현해 보기로 하였습니다. (데이터셋 : [#1, ravdess, 영어](https://zenodo.org/record/1188976#.XjJiU2gzZhE) [#2, savee, 영어](https://www.kaggle.com/barelydedicated/savee-database) [#3, emo_DB, 독일어](http://emodb.bilderbar.info/download/) [#4, TESS, 영어](https://www.kaggle.com/ejlok1/toronto-emotional-speech-set-tess))
+기본적으로는 화난 톤/일반 톤으로 분리하고, 더 나아가서는 각 톤마다 클러스터링을 통해 감정표현을 할 수 있도록 하는 연구입니다. 펭수나 짱구 같은 캐릭터 연기의 경우 상당히 어려운 점이 있습니다. 톤이나 dB, 피치 등으로 구분하기가 쉽지 않기 때문입니다. 
+
+그래서 딥러닝을 이용한 [Feature extraction 방식](https://www.intechopen.com/books/from-natural-to-artificial-intelligence-algorithms-and-applications/some-commonly-used-speech-feature-extraction-algorithms)을 적용하기로 결정했습니다. 오픈소스 프로젝트는 구하지 못했으나 데이터셋은 구할 수 있어 간단히 구현해 보기로 하였습니다. (데이터셋 : [#1, ravdess, 영어](https://zenodo.org/record/1188976#.XjJiU2gzZhE) [#2, savee, 영어](https://www.kaggle.com/barelydedicated/savee-database) [#3, emo_DB, 독일어](http://emodb.bilderbar.info/download/) [#4, TESS, 영어](https://www.kaggle.com/ejlok1/toronto-emotional-speech-set-tess))
 
 + 시간이 허락되었다면 구현하고 싶었던 것 : [Automatic Speech Emotion Recognition Using Machine Learning](https://www.intechopen.com/online-first/automatic-speech-emotion-recognition-using-machine-learning)
 
@@ -333,7 +337,19 @@ Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해�
 
 -> 참고 - `python duck_emotion.py -k True` : RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능). 시험삼아 적용해 보았으나 성능이 별로 좋지 않아 사용하지 않을 것 같습니다.
 
+-> 일단 현재 주어진 데이터셋, 모델에서 최적인 모델을 생성하여 `optimized_pretrained_model.joblib`으로 저장해 놓았습니다.
 
+3. 실제로 클러스터링 하기 : `python classify.py`로 원하는 음성 파일들을 클러스터링 할 수 있습니다.
+
+```
+python classify.py -c "checkpoint_file" -i "directory where to-be-clustered files are in" -o "directory you want to store clustered data"
+```
+
+위와 같이 돌리면 아래와 같이 나옵니다.
+
+![image](https://user-images.githubusercontent.com/26838115/73902301-b41a9c00-48d8-11ea-9455-02d281487401.png)
+
+![image](https://user-images.githubusercontent.com/26838115/73902319-c5fc3f00-48d8-11ea-936a-775455860905.png)
 
 <br></br>
 
@@ -349,7 +365,9 @@ Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해�
 
 - Anger, Neutral 두 가지로 clustering 시
 
-**: ravdess + savee + emoDB -> Training set 481개, Testing set 161개, Accuracy 95\~97%**
+**: ravdess + savee + emoDB + TESS -> Training set 1072개, Testing set 358개, Accuracy 98%**
+
+: ravdess + savee + emoDB -> Training set 481개, Testing set 161개, Accuracy 95\~97%
 
 : ravdess + savee -> Training set 351개, Testing set 117개, Accuracy 93\~96%
 
@@ -382,6 +400,12 @@ Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해�
 
 -> 그런 식으로 데이터셋을 확장성 있게 늘려 나갈 수 있습니다!
 
+
+> 현재 작업 상황
+
+-> Model Optimization 작업 마무리 중입니다(끝이 없음).
+
+-> 짱구 데이터 일부 테스트 완료했습니다.
 
 <br></br>
 ---
