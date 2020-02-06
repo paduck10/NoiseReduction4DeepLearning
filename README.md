@@ -327,9 +327,11 @@ Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해�
 
 -> `python duck_emotion.py` : MLP 모델 학습, Accuracy 약 97% (하이퍼 파라미터 조정을 통해 최적화 가능, 하지만 굳이 안 바꾸셔도...)
 
--> 위 명령어를 실행시키면, 
+-> 위 명령어를 실행시키면, `ravdess_data`폴더에 있는 데이터셋을 이용해서 학습을 시작합니다(CPU이용). 그리고 학습이 끝난 결과를 `/home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/chkpt/checkpoint_layer500000_testsize25_500.joblib` 에 저장합니다. 파일명은 `dump(model, './chkpt/checkpoint_layer500000_testsize25_{}.joblib'.format(i))` 여기서 바꿔주실 수 있습니다.
 
--> `python duck_emotion.py -k True` : RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능)
+-> 현재 pretrained_model은 Anger와 Neutral 두 가지를 분류하도록 학습된 모델입니다. 추가로 클러스터링을 하고 싶으면, `main(args)`함수 안에서 `observed_emotions = ['neutral', 'angry']`에 감정을 추가해 주시면 됩니다.
+
+-> 참고 - `python duck_emotion.py -k True` : RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능). 시험삼아 적용해 보았으나 성능이 별로 좋지 않아 사용하지 않을 것 같습니다.
 
 
 
