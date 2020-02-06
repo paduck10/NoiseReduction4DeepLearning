@@ -130,7 +130,7 @@ def scikit_train(x_train, x_test, y_train, y_test, emotions, observed_emotions):
 #initialize the Multi Layer Perceptron Classifier
 
 	model = MLPClassifier(alpha = 0.01, batch_size = 256, epsilon= 1e-08,
-	hidden_layer_sizes = (500000, ), learning_rate = 'adaptive', max_iter=1, warm_start=True, verbose=True, tol=1e-8)
+	hidden_layer_sizes = (500000, ), learning_rate = 'adaptive', max_iter=1, warm_start=True, verbose=True, tol=1e-7)
 # layer_size : 500000 -> acc : 65%
 # layer_size : 500 -> acc : 47%
 
@@ -147,6 +147,14 @@ def scikit_train(x_train, x_test, y_train, y_test, emotions, observed_emotions):
 		model.fit(x_train, y_train)
 		#y_predict_proba = model.predict_proba(x_test)
 		#print(y_predict_proba)
+
+		# Predict for the test set, for each iteration
+		y_pred=model.predict(x_test)
+
+		# Calculate the accuracy of our model
+		accuracy = accuracy_score(y_true=y_test, y_pred=y_pred)
+		print('Accuracy at %th iteration: {:.2f}%'.format(i, accuracy*100))
+		dump(model, './chkpt/checkpoint_{}.joblib'.format(i))
 		
 	dump(model, './chkpt/checkpoint_layer500000_testsize25_{}.joblib'.format(i))
 
