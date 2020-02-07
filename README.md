@@ -526,3 +526,35 @@ Speech-To-Text API 이용해서 스크립트 작성은 Azure SDK 사용한다고
 
 데이터셋 생성 및 자동화 프로세스를 한 바퀴 돌고 나면, 본격적으로 모델을 학습시키며 Fine-Tuning 작업을 진행해 볼 수 있을 것 같습니다.
 
+
+<br></br>
+---
+
+### 각종 버그들 정리 :
+
+- conda 가상환경 만들 때 에러 :
+
+[conda ... ssl_verify no option  주기](https://docs.conda.io/projects/conda/en/latest/user-guide/configuration/disable-ssl-verification.html)
+
+- pip install error :
+
+Add --trusted-host option!
+
+`pip install --trusted-host=pypi.org --trusted-host=files.pythonhosted.org PACKAGE`
+
+
+- CUDA out of memory error1 :
+
+```
+import os
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"   # see issue #152
+# 예시 : os.environ["CUDA_VISIBLE_DEVICES"]="0" 
+```
+
+위의 경우, `nvidia-smi`를 치고, 해당 GPU가 메모리를 얼마나 사용하고 있는지 체크하고 해당 옵션을 주면 된다.
+
+- CUDA out of memory error2 :
+
+Tensorflow기반일 경우, 아래 항목을 `sess_config`옵션에 추가해 준다.
+
+`sess_config.gpu_options.allow_growth=True`
