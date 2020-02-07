@@ -57,16 +57,17 @@ def extract_feature(file_name, mfcc, chroma, mel):
 
 # Load the data and extract features for each sound file
 def load_data(emotions, observed_emotions, test_size = 0.5):
-    x, y = [], []
-    for file in glob.glob('/home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/ravdess_data/Actor_*/*.wav'):
-        file_name = os.path.basename(file)
-        emotion = emotions[file_name.split("-")[2]]
-        if emotion not in observed_emotions:
-            continue
-        feature = extract_feature(file, mfcc=True, chroma=True, mel=True)
-        x.append(feature)
-        y.append(emotion)
-    return train_test_split(np.array(x), y, test_size=test_size, random_state=9)
+	x, y = [], []
+	for file in glob.glob('/home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/ravdess_data/Actor_*/*.wav'):
+		file_name = os.path.basename(file)
+		emotion = emotions[file_name.split("-")[2]]
+		if emotion not in observed_emotions:
+			continue
+		print('%s\'s items is on the track' % file_name)
+		feature = extract_feature(file, mfcc=True, chroma=True, mel=True)
+		x.append(feature)
+		y.append(emotion)
+	return train_test_split(np.array(x), y, test_size=test_size, random_state=9)
 
 
 
@@ -130,7 +131,7 @@ def scikit_train(x_train, x_test, y_train, y_test, emotions, observed_emotions):
 #initialize the Multi Layer Perceptron Classifier
 
 	model = MLPClassifier(alpha = 0.01, batch_size = 256, epsilon= 1e-08,
-	hidden_layer_sizes = (500000, ), learning_rate = 'adaptive', max_iter=1, warm_start=True, verbose=True, tol=1e-8)
+	hidden_layer_sizes = (500000, ), learning_rate = 'adaptive', max_iter=1, warm_start=True, verbose=True, tol=1e-7)
 # layer_size : 500000 -> acc : 65%
 # layer_size : 500 -> acc : 47%
 
@@ -147,6 +148,16 @@ def scikit_train(x_train, x_test, y_train, y_test, emotions, observed_emotions):
 		model.fit(x_train, y_train)
 		#y_predict_proba = model.predict_proba(x_test)
 		#print(y_predict_proba)
+
+		if i % 10 == 0:
+			# Predict for the test set, for each iteration
+			y_pred=model.predict(x_test)
+
+			# Calculate the accuracy of our model
+			accuracy = accuracy_score(y_true=y_test, y_pred=y_pred)
+			print('Accuracy at {}th iteration: {:.2f}%'.format(i, accuracy*100))
+			print('Loss at %sth iteration: %s' % (i, model.loss_))
+			dump(model, './chkpt/checkpoint_{}.joblib'.format(i))
 		
 	dump(model, './chkpt/checkpoint_layer500000_testsize25_{}.joblib'.format(i))
 
@@ -190,8 +201,8 @@ def main(args):
     }			
 
     # To add more emotion for clustering, add emotion in "observed_emotions"
-    observed_emotions = ['neutral', 'angry']
-    #observed_emotions = ['neutral', 'angry', 'sad']
+	#observed_emotions = ['neutral', 'calm', 'happy', 'sad', 'angry', 'fearful', 'disgust', 'surprised']
+    observed_emotions = ['neutral', 'angry', 'surprised']
 
     x_train, x_test, y_train, y_test = load_data(emotions, observed_emotions, test_size = 0.25)
 
