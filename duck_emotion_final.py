@@ -202,7 +202,7 @@ def main(args):
 
     # To add more emotion for clustering, add emotion in "observed_emotions"
 	#observed_emotions = ['neutral', 'calm', 'happy', 'sad', 'angry', 'fearful', 'disgust', 'surprised']
-    observed_emotions = ['neutral', 'angry', 'surprised']
+    observed_emotions = ['neutral', 'angry']
 
     x_train, x_test, y_train, y_test = load_data(emotions, observed_emotions, test_size = 0.25)
 
