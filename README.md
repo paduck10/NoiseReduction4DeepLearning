@@ -416,6 +416,8 @@ python classify.py -c "checkpoint_file" -i "directory where to-be-clustered file
 
 > 현재 작업 상황
 
+-> 학습된 모델별로 성능 편차가 매우 큽니다. Fine-Tuning 작업은 실험을 통해 진행하셔야 합니다.
+
 -> Model Optimization 작업 마무리 중입니다(끝이 없음).
 
 -> 짱구 데이터 일부 테스트 완료했습니다.
