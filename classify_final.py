@@ -154,7 +154,7 @@ def main(args, emotions, observed_emotions):
 if __name__== "__main__":
 
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-c', '--checkpoint', help='Load the trained model for classification', default='/home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/chkpt/4_pretrained_model2.joblib')
+	parser.add_argument('-c', '--checkpoint', help='Load the trained model for classification', default='/home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/chkpt/3_pretrained_model.joblib')
 	parser.add_argument('-i', '--input_dir', help='Input directory which dataset you want to test lives', default='/home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/custom_dataset/')
 	parser.add_argument('-o', '--output_dir', help='Output directory to store your clustered files, based on the emotion dectection', default='/home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/custom_dataset/clustered/')
 	args = parser.parse_args()
