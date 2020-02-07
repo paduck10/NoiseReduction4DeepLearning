@@ -291,7 +291,7 @@ notch filter(특정 주파수 밴드만 통과시키는 방식의 필터링)을 
 
 3. 데이터셋을 넣고, 훈련을 시킵니다!
 
--> 각 데이터셋의 경우, ravdess에서 요구하는 파일 형식을 맞추어 주었습니다. 예) sth-sth-emotion-sth-sth-sth-sth의 형식인데, 다른 데이터셋도 `emotion`부분에 잘 맞도록 align을 해 주었습니다. (`savee_to_ravdess.py`, `emoDB_to_ravdess.py`, `tess_to_ravdess.py`가 그 역할을 함)
+-> 각 데이터셋의 경우, ravdess에서 요구하는 파일 형식을 맞추어 주었습니다. 예) sth-sth-emotion-sth-sth-sth-sth의 형식인데, 다른 데이터셋도 `emotion`부분에 잘 맞도록 align을 해 주었습니다. (`savee_to_ravdess.py`, `emoDB_to_ravdess.py`, `tess_to_ravdess.py`가 그 역할을 함. savee, emoDB, TESS데이터 셋을 다운 받은 다음에 해당 py파일들을 돌리면 ravdess dataset에 맞는 포맷으로 변환시켜 `ravdess_data`폴더에 저장해 줍니다.)
 
 <br></br>
 
@@ -325,21 +325,22 @@ Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해�
 
 1. 먼저, 환경 설정을 바꾸어 줍니다 `conda activate emotion`
 
-2. /home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/ 폴더로 이동하여, `duck_emotion.py` 파일을 실행시킵니다.
+2. **모델 학습시키기** : /home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/ 폴더로 이동하여, `duck_emotion.py` 파일을 실행시킵니다.
 
 - 예시 :
 
 -> `python duck_emotion.py` : MLP 모델 학습, Accuracy 약 97% (하이퍼 파라미터 조정을 통해 최적화 가능, 하지만 굳이 안 바꾸셔도...)
 
--> 위 명령어를 실행시키면, `ravdess_data`폴더에 있는 데이터셋을 이용해서 학습을 시작합니다(CPU이용). 그리고 학습이 끝난 결과를 `/home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/chkpt/checkpoint_layer500000_testsize25_500.joblib` 에 저장합니다. 파일명은 `dump(model, './chkpt/checkpoint_layer500000_testsize25_{}.joblib'.format(i))` 여기서 바꿔주실 수 있습니다.
+-> 위 명령어를 실행시키면, `ravdess_data`폴더에 있는 데이터셋을 이용해서 학습을 시작합니다(CPU이용). 그리고 학습이 끝난 결과를 `/home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/chkpt/checkpoint_{iteration}.joblib` 에 저장합니다. 파일명은 `dump(model, './chkpt/checkpoint_{}.joblib'.format(i))` 여기서 바꿔주실 수 있습니다.
 
 -> 현재 pretrained_model은 Anger와 Neutral 두 가지를 분류하도록 학습된 모델입니다. 추가로 클러스터링을 하고 싶으면, `main(args)`함수 안에서 `observed_emotions = ['neutral', 'angry']`에 감정을 추가해 주시면 됩니다.
 
+
 -> 참고 - `python duck_emotion.py -k True` : RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능). 시험삼아 적용해 보았으나 성능이 별로 좋지 않아 사용하지 않을 것 같습니다.
 
--> 일단 현재 주어진 데이터셋, 모델에서 최적인 모델을 생성하여 `optimized_pretrained_model.joblib`으로 저장해 놓았습니다.
+-> chkpt 폴더에 있는 `2_pretrained_model.joblib`은 Neutral과 Angry를, `4_pretrained_model`은 Neutral, Sad, Angry, Surprised로 Clustering을 진행하여 학습시킨 모델입니다. `classify.py` 실행시, `-c` 인자로 클러스터링 갯수에 해당하는 모델을 넣어 주시면 됩니다(`classify.py` 파일에서 후술).
 
-3. 실제로 클러스터링 하기 : `python classify.py`로 원하는 음성 파일들을 클러스터링 할 수 있습니다.
+3. **실제로 클러스터링 하기** : `python classify.py`로 원하는 음성 파일들을 클러스터링 할 수 있습니다.
 
 ```
 python classify.py -c "checkpoint_file" -i "directory where to-be-clustered files are in" -o "directory you want to store clustered data"
