@@ -360,6 +360,10 @@ python classify.py -c "checkpoint_file" -i "directory where to-be-clustered file
 
 -> `classify.py`에서 `observed_emotions`변수에 클러스터링을 원하는 감정들을 추가해 주면 됩니다.
 
+-> 주의 사항 : `sad`를 클러스터링할 감정에 추가하게 되면, 거의 대부분의 portion을 차지하게 됩니다(클러스터링 망함). `sad`의 경우, 그 편차가 너무 심해 `neutral`이어야 하는 부분을 전부 잡아먹게 됩니다.
+
+-> `classify_final.py`파일의 경우, `neutral`, `angry`, `surprised`세 가지의 경우로 학습한 모델을 불러와 clustering을 실행합니다.
+
 <br></br>
 
 > Improvements?
