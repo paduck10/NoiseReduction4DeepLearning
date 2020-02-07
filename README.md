@@ -338,7 +338,7 @@ Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해�
 
 -> 참고 - `python duck_emotion.py -k True` : RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능). 시험삼아 적용해 보았으나 성능이 별로 좋지 않아 사용하지 않을 것 같습니다.
 
--> chkpt 폴더에 있는 `2_pretrained_model.joblib`은 Neutral과 Angry를, `4_pretrained_model`은 Neutral, Sad, Angry, Surprised로 Clustering을 진행하여 학습시킨 모델입니다. `classify.py` 실행시, `-c` 인자로 클러스터링 갯수에 해당하는 모델을 넣어 주시면 됩니다(`classify.py` 파일에서 후술).
+
 
 3. **실제로 클러스터링 하기** : `python classify.py`로 원하는 음성 파일들을 클러스터링 할 수 있습니다.
 
@@ -346,11 +346,19 @@ Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해�
 python classify.py -c "checkpoint_file" -i "directory where to-be-clustered files are in" -o "directory you want to store clustered data"
 ```
 
+-> chkpt 폴더에 있는 `2_pretrained_model.joblib`은 Neutral과 Angry를, `4_pretrained_model`은 Neutral, Sad, Angry, Surprised로 Clustering을 진행하여 학습시킨 모델입니다. `classify.py` 실행시, `-c` 인자로 클러스터링 갯수에 해당하는 모델을 넣어 주시면 됩니다(`classify.py` 파일에서 후술).
+
+
 위와 같이 돌리면 아래와 같이 나옵니다.
 
 ![image](https://user-images.githubusercontent.com/26838115/73902301-b41a9c00-48d8-11ea-9455-02d281487401.png)
 
 ![image](https://user-images.githubusercontent.com/26838115/73902319-c5fc3f00-48d8-11ea-936a-775455860905.png)
+
+
+3.2 **클러스터링 갯수 늘리기** :
+
+-> `classify.py`에서 `observed_emotions`변수에 클러스터링을 원하는 감정들을 추가해 주면 됩니다.
 
 <br></br>
 
@@ -477,6 +485,8 @@ python generator.py -c ./config/config.yaml -d /home/deokgyu.ahn/practice/Resour
 > How it work?
 
 -> 테스트만 해보시길 원하신다면, 아래와 같은 형식으로 실행시키면 됩니다.
+
+-> 먼저, 환경 설정을 바꾸어 줍니다. `conda activate voicefilter`
 
 ```
 python inference.py -c [config yaml] -e [path of embedder pt file] --checkpoint_path [path of chkpt pt file] -m [path of mixed wav file] -r [path of reference wav file] -o [output directory]
