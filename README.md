@@ -333,12 +333,12 @@ Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해�
 
 -> 위 명령어를 실행시키면, `ravdess_data`폴더에 있는 데이터셋을 이용해서 학습을 시작합니다(CPU이용). 그리고 학습이 끝난 결과를 `/home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/chkpt/checkpoint_{iteration}.joblib` 에 저장합니다. 파일명은 `dump(model, './chkpt/checkpoint_{}.joblib'.format(i))` 여기서 바꿔주실 수 있습니다.
 
--> 현재 pretrained_model은 Anger와 Neutral 두 가지를 분류하도록 학습된 모델입니다. 추가로 클러스터링을 하고 싶으면, `main(args)`함수 안에서 `observed_emotions = ['neutral', 'angry']`에 감정을 추가해 주시면 됩니다. (그런데 코드 수정 후 감정 클러스터링 갯수 5개 이상 넣으면 갑자기 터지기 시작했습니다.. 메모리 부족인듯?)
+-> 현재 pretrained_model은 Anger와 Neutral 두 가지를 분류하도록 학습된 모델입니다. 추가로 클러스터링을 하고 싶으면, `main(args)`함수 안에서 `observed_emotions = ['neutral', 'angry']`에 감정을 추가해 주시면 됩니다. (그런데 코드 수정 후 감정 클러스터링 갯수 5개 이상 넣으면 갑자기 터지기 시작했습니다.. 음성파일의 코덱 문제이거나, 너무 많은 파일을 처리하려고 해서 그런듯?)
 
 
 -> 참고 - RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능). 시험삼아 적용해 보았으나 성능이 별로 좋지 않아 사용하지 않을 것 같습니다.
 
--> Keras 모델이 확장성이 뛰어난 것 같아 시험 중입니다. epoch을 늘리면 학습이 잘 되는 것 같기도... 여러 가지를 클러스터링할 때는 오히려 성능이 더 좋습니다!!(시각화도 뛰어남) `neutral`, `sad`, `angry`, `surprised`로 클러스터링 시 정확도 약 95프로! `duck_emotion.py -k True`로 실행시키면 기본적으로 keras mlp모델을 사용하도록 코드를 수정해 놓았습니다.
+-> Keras-mlp모델이 확장성이 뛰어난 것 같아 시험 중입니다. epoch을 늘리면 학습이 잘 되는 것 같기도... 여러 가지를 클러스터링할 때는 오히려 성능이 더 좋습니다!!(시각화도 뛰어남) `neutral`, `sad`, `angry`, `surprised`로 클러스터링 시 정확도 약 95프로! `duck_emotion.py -k True`로 실행시키면 기본적으로 keras mlp모델을 사용하도록 코드를 수정해 놓았습니다.
 
 <br></br>
 
@@ -367,6 +367,8 @@ python classify_keras.py -c "checkpoint_file" -i "directory where to-be-clustere
 ```
 
 -> chkpt_keras 폴더에 있는 `4_pretrained_model.hdf5`파일은 `neutral`, `sad`, `angry`, `surprised` 네 가지의 모델을 학습시킨 결과물입니다.
+
+-> 이건 아직 작업 중...
 
 3.2 **클러스터링 갯수 늘리기** :
 
