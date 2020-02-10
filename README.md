@@ -313,7 +313,7 @@ Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해�
 
 이 3가지 스텝을 밟으면 간단히 vector 포맷으로 오디오 파일을 변환할 수 있습니다. Feature extraction을 위한 함수는 librosa library에서 제공해주고 있으므로, 간단하게 구현할 수 있습니다.
 
-그 다음으로는 그냥 classification을 딥러닝 모델을 통해 계속 돌리면 됩니다!
+그 다음으로는 그냥 classification을 딥러닝 모델을 통해 계속 돌리면 됩니다! 
 
 -> 참고 : 다른 Feature extraction 방식들의 장/단점 도표 정리
 
@@ -333,32 +333,39 @@ Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해�
 
 -> 위 명령어를 실행시키면, `ravdess_data`폴더에 있는 데이터셋을 이용해서 학습을 시작합니다(CPU이용). 그리고 학습이 끝난 결과를 `/home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/chkpt/checkpoint_{iteration}.joblib` 에 저장합니다. 파일명은 `dump(model, './chkpt/checkpoint_{}.joblib'.format(i))` 여기서 바꿔주실 수 있습니다.
 
--> 현재 pretrained_model은 Anger와 Neutral 두 가지를 분류하도록 학습된 모델입니다. 추가로 클러스터링을 하고 싶으면, `main(args)`함수 안에서 `observed_emotions = ['neutral', 'angry']`에 감정을 추가해 주시면 됩니다.
+-> 현재 pretrained_model은 Anger와 Neutral 두 가지를 분류하도록 학습된 모델입니다. 추가로 클러스터링을 하고 싶으면, `main(args)`함수 안에서 `observed_emotions = ['neutral', 'angry']`에 감정을 추가해 주시면 됩니다. (그런데 코드 수정 후 감정 클러스터링 갯수 5개 이상 넣으면 갑자기 터지기 시작했습니다.. 메모리 부족인듯?)
 
 
--> 참고 - `python duck_emotion.py -k True` : RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능). 시험삼아 적용해 보았으나 성능이 별로 좋지 않아 사용하지 않을 것 같습니다.
+-> 참고 - RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능). 시험삼아 적용해 보았으나 성능이 별로 좋지 않아 사용하지 않을 것 같습니다.
 
-#### 중요 Update :
-
-Keras 모델이 확장성이 뛰어난 것 같아 시험 중입니다. epoch을 늘리면 학습이 잘 되는 것 같기도... 여러 가지를 클러스터링할 때는 오히려 성능이 더 좋습니다!! `neutral`, `sad`, `angry`, `surprised`로 클러스터링 시 정확도 약 85프로!
+-> Keras 모델이 확장성이 뛰어난 것 같아 시험 중입니다. epoch을 늘리면 학습이 잘 되는 것 같기도... 여러 가지를 클러스터링할 때는 오히려 성능이 더 좋습니다!!(시각화도 뛰어남) `neutral`, `sad`, `angry`, `surprised`로 클러스터링 시 정확도 약 95프로! 기본적으로 keras mlp모델을 사용하도록 코드를 수정해 놓았습니다.
 
 
 
 3. **실제로 클러스터링 하기** : `python classify.py`로 원하는 음성 파일들을 클러스터링 할 수 있습니다.
 
+3.0 scikit mlp모델을 이용한 클러스터링 :
+
+ ```
+ python classify.py -c "checkpoint_file" -i "directory where to-be-clustered files are in" -o "directory you want to store clustered data"
+ ```
+
+ -> chkpt 폴더에 있는 `2_pretrained_model.joblib`은 Neutral과 Angry를, `4_pretrained_model`은 Neutral, Sad, Angry, Surprised로 Clustering을 진행하여 학습시킨 모델입니다. `classify.py` 실행시, `-c` 인자로 클러스터링 갯수에 해당하는 모델을 넣어 주시면 됩니다(`classify.py` 파일에서 후술).
+
+
+ 위와 같이 돌리면 아래와 같이 나옵니다.
+
+ ![image](https://user-images.githubusercontent.com/26838115/73902301-b41a9c00-48d8-11ea-9455-02d281487401.png)
+
+ ![image](https://user-images.githubusercontent.com/26838115/73902319-c5fc3f00-48d8-11ea-936a-775455860905.png)
+
+3.1 keras mlp모델을 이용한 클러스터링 :
+
 ```
-python classify.py -c "checkpoint_file" -i "directory where to-be-clustered files are in" -o "directory you want to store clustered data"
+python classify_keras.py -c "checkpoint_file" -i "directory where to-be-clustered files are in" -o "directory you want to store clustered data"
 ```
 
--> chkpt 폴더에 있는 `2_pretrained_model.joblib`은 Neutral과 Angry를, `4_pretrained_model`은 Neutral, Sad, Angry, Surprised로 Clustering을 진행하여 학습시킨 모델입니다. `classify.py` 실행시, `-c` 인자로 클러스터링 갯수에 해당하는 모델을 넣어 주시면 됩니다(`classify.py` 파일에서 후술).
-
-
-위와 같이 돌리면 아래와 같이 나옵니다.
-
-![image](https://user-images.githubusercontent.com/26838115/73902301-b41a9c00-48d8-11ea-9455-02d281487401.png)
-
-![image](https://user-images.githubusercontent.com/26838115/73902319-c5fc3f00-48d8-11ea-936a-775455860905.png)
-
+-> chkpt_keras 폴더에 있는 `4_pretrained_model.hdf5`파일은 `neutral`, `sad`, `angry`, `surprised` 네 가지의 모델을 학습시킨 결과물입니다.
 
 3.2 **클러스터링 갯수 늘리기** :
 
