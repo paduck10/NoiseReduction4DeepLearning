@@ -338,8 +338,9 @@ Feature extraction은 여러 가지가 있습니다(MFCC, LPC, LPCC, ...). 해�
 
 -> 참고 - RNN+LSTM 모델 학습([from Keras](https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/)), Accuracy 약 80% (모델 Layer늘리기, 배치 정규화, Dropout 적용 등으로 성능 향상 가능). 시험삼아 적용해 보았으나 성능이 별로 좋지 않아 사용하지 않을 것 같습니다.
 
--> Keras 모델이 확장성이 뛰어난 것 같아 시험 중입니다. epoch을 늘리면 학습이 잘 되는 것 같기도... 여러 가지를 클러스터링할 때는 오히려 성능이 더 좋습니다!!(시각화도 뛰어남) `neutral`, `sad`, `angry`, `surprised`로 클러스터링 시 정확도 약 95프로! 기본적으로 keras mlp모델을 사용하도록 코드를 수정해 놓았습니다.
+-> Keras 모델이 확장성이 뛰어난 것 같아 시험 중입니다. epoch을 늘리면 학습이 잘 되는 것 같기도... 여러 가지를 클러스터링할 때는 오히려 성능이 더 좋습니다!!(시각화도 뛰어남) `neutral`, `sad`, `angry`, `surprised`로 클러스터링 시 정확도 약 95프로! `duck_emotion.py -k True`로 실행시키면 기본적으로 keras mlp모델을 사용하도록 코드를 수정해 놓았습니다.
 
+<br></br>
 
 
 3. **실제로 클러스터링 하기** : `python classify.py`로 원하는 음성 파일들을 클러스터링 할 수 있습니다.
