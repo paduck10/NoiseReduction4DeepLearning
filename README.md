@@ -525,7 +525,19 @@ python inference.py -c ./config/config.yaml -e embedder.pt --checkpoint_path chk
 
 -> 화자 2명이 번갈아 가면서 말하는 경우는 생각보다 준수한 성능을 보입니다. (test_jieun 폴더에서 jieun_duck_alternate.wav파일과 out_test/out_jieun_duck_alternate.wav파일 비교)
 
+-> Overfitting을 방지하기 위해서 조정해야 할 파라미터들 :
 
+1. 레이어의 갯수 : hidden_layer갯수가 늘어날수록 오버피팅이 심하게 일어날 수 있습니다.
+
+2. iteration : max_iter 갯수(전체 데이터셋을 몇번 훑을지)
+
+3. 데이터셋 : 데이터셋이 작을수록 오버피팅 확률이 증가
+
+4. alpha : L2 norm 값으로, 학습 시, 기울기 값을 갱신할때 stride size를 줄인다.
+
+5. test_size : 기본 - `0.25`, 즉 25%를 테스트로 활용.
+
+6. `tol` : tol값을 줄일수록 해당 tol값 이하로 loss값이 개선이 되지 않으면 학습을 중지
 
 <br></br>
 ---
