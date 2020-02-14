@@ -388,6 +388,8 @@ python classify_keras.py -c "checkpoint_file" -i "directory where to-be-clustere
 
 -> 데이터셋을 늘린다고 해서 Accuracy가 무조건적으로 늘어나는 것은 아닙니다. 아래에 Anger, Neutral, Sadness 세 가지로 clustering 시 정확도 수치를 데이터셋 별로 정리해 놓았습니다.
 
+-> **중요** : TESS 데이터셋(`ravdess/Actor_TESS`)은 모델 성능에 악영향을 주는 것 같습니다! 너무 짧아서 그런 게 아닌가 하는 예측을 해 봅니다. 실제 모델 학습 시킬때, 빼고 진행하는 것이 더 나을 것 같습니다.. 
+
 <br></br>
 
 - Anger, Neutral 두 가지로 clustering 시
