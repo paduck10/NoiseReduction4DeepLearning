@@ -438,6 +438,45 @@ python classify_keras.py -c "checkpoint_file" -i "directory where to-be-clustere
 
 -> 짱구 데이터 일부 테스트 완료했습니다.
 
+
+- Overfitting을 방지하기 위해서 조정해야 할 파라미터들 :
+
+1. 레이어의 갯수 : hidden_layer갯수가 늘어날수록 오버피팅이 심하게 일어날 수 있습니다.
+
+2. iteration : max_iter 갯수(전체 데이터셋을 몇번 훑을지)
+
+3. 데이터셋 : 데이터셋이 작을수록 오버피팅 확률이 증가
+
+4. alpha : L2 norm 값으로, 학습 시, 기울기 값을 갱신할때 stride size를 줄인다.
+
+5. test_size : 기본 - `0.25`, 즉 25%를 테스트로 활용.
+
+6. `tol` : tol값을 줄일수록 해당 tol값 이하로 loss값이 개선이 되지 않으면 학습을 중지
+
+- Overfitting 체크하기
+
+`benchmark.py`라는 파일을 이용하면, 개별 체크포인트 파일을 불러와서 오버피팅이 얼마나 일어났는지를 accuracy를 통해 체크할 수 있습니다! (원래는 validation dataset을 전체 데이터셋으로부터 따로 분리해야 하지만, 양이 너무 적어 validation을 전체 데이터셋을 이용해 체크)
+
+-> 예시 : `python benchmark.py -c /home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/chkpt/checkpoint_10.joblib`
+
+-> 아웃풋 예시 :
+
+```
+Load data files and directory done!
+Checkpoint loaded at /home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/chkpt/checkpoint_10.joblib
+Tested dataset : total 2776.
+Current time : 17: 05: 07
+Benchmark test on model : checkpoint_10.joblib
+Tested Accuracy with pretrained model: 41.50%
+----------------------------------------
+```
+
+-> 간편하게 여러 체크포인트 파일을 확인해 볼 수 있도록, `benchmark_script.sh`파일을 만들어 놓았습니다. 이 파일은 `chkpt`경로에 있는 체크포인트들(e.g. `checkpoint_10.joblib`, `checkpoint_20.joblib`...)들을 조회하며 accuracy를 `log_benchmakr.out`이라는 파일에 저장합니다.
+
+-> 이때, 3번째 줄에 있는 `for ((i = 0; i <= 290; i += 10))` 부분에서 체크포인트를 어떤 파일까지 넣어서 측정할지 `290`부분의 변수만 바꾸어 주면 됩니다.
+
+-> accuracy가 높게 나온 모델이 일반적으로 클러스터링을 잘 해주는 모델인 것 같습니다.
+
 <br></br>
 ---
 
@@ -528,43 +567,6 @@ python inference.py -c ./config/config.yaml -e embedder.pt --checkpoint_path chk
 -> 화자 2명이 번갈아 가면서 말하는 경우는 생각보다 준수한 성능을 보입니다. (test_jieun 폴더에서 jieun_duck_alternate.wav파일과 out_test/out_jieun_duck_alternate.wav파일 비교)
 
 
-- Overfitting을 방지하기 위해서 조정해야 할 파라미터들 :
-
-1. 레이어의 갯수 : hidden_layer갯수가 늘어날수록 오버피팅이 심하게 일어날 수 있습니다.
-
-2. iteration : max_iter 갯수(전체 데이터셋을 몇번 훑을지)
-
-3. 데이터셋 : 데이터셋이 작을수록 오버피팅 확률이 증가
-
-4. alpha : L2 norm 값으로, 학습 시, 기울기 값을 갱신할때 stride size를 줄인다.
-
-5. test_size : 기본 - `0.25`, 즉 25%를 테스트로 활용.
-
-6. `tol` : tol값을 줄일수록 해당 tol값 이하로 loss값이 개선이 되지 않으면 학습을 중지
-
-- Overfitting 체크하기
-
-`benchmark.py`라는 파일을 이용하면, 개별 체크포인트 파일을 불러와서 오버피팅이 얼마나 일어났는지를 accuracy를 통해 체크할 수 있습니다! (원래는 validation dataset을 전체 데이터셋으로부터 따로 분리해야 하지만, 양이 너무 적어 validation을 전체 데이터셋을 이용해 체크)
-
--> 예시 : `python benchmark.py -c /home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/chkpt/checkpoint_10.joblib`
-
--> 아웃풋 예시 :
-
-```
-Load data files and directory done!
-Checkpoint loaded at /home/deokgyu.ahn/practice/Resource/Code/emotion/duck_emotion/chkpt/checkpoint_10.joblib
-Tested dataset : total 2776.
-Current time : 17: 05: 07
-Benchmark test on model : checkpoint_10.joblib
-Tested Accuracy with pretrained model: 41.50%
-----------------------------------------
-```
-
--> 간편하게 여러 체크포인트 파일을 확인해 볼 수 있도록, `benchmark_script.sh`파일을 만들어 놓았습니다. 이 파일은 `chkpt`경로에 있는 체크포인트들(e.g. `checkpoint_10.joblib`, `checkpoint_20.joblib`...)들을 조회하며 accuracy를 `log_benchmakr.out`이라는 파일에 저장합니다.
-
--> 이때, 3번째 줄에 있는 `for ((i = 0; i <= 290; i += 10))` 부분에서 체크포인트를 어떤 파일까지 넣어서 측정할지 `290`부분의 변수만 바꾸어 주면 됩니다.
-
--> accuracy가 높게 나온 모델이 일반적으로 클러스터링을 잘 해주는 모델인 것 같습니다.
 
 <br></br>
 ---
@@ -613,3 +615,5 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"   # see issue #152
 Tensorflow기반일 경우, 아래 항목을 `sess_config`옵션에 추가해 준다.
 
 `sess_config.gpu_options.allow_growth=True`
+
+- 기타 버그는 issue에 달아주시길 부탁드립니다.
