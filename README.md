@@ -477,6 +477,15 @@ Tested Accuracy with pretrained model: 41.50%
 
 -> accuracy가 높게 나온 모델이 일반적으로 클러스터링을 잘 해주는 모델인 것 같습니다.
 
+
+neutral (2158, 81프로, 1시간 20분)
+angry + Surprised (496, 18프로, 18분)
+
+neutral (1715, 64프로, 1시간 4분)
+•sad (479, 18프로, 20분)
+
+
+
 <br></br>
 ---
 
